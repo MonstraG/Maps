@@ -16,7 +16,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -41,6 +43,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         new MapData(this);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(pickRandomCameraPos()));
     }
 
     public static void drawCity(String name, LatLng pos, Boolean moveCamera) {
@@ -48,6 +52,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(pos).title(name));
         if (moveCamera)
             mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+    }
+
+    private LatLng pickRandomCameraPos() {
+        ArrayList<String> cities = MapData.loadCityList();
+        if (cities.size() > 0) {
+            Random randomGenerator = new Random();
+            String cityName = cities.get(randomGenerator.nextInt(cities.size()));
+            return MapData.getPos(cityName);
+        } else
+            return new LatLng(0.0, 0.0);
     }
 
 }

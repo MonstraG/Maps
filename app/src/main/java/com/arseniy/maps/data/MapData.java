@@ -69,8 +69,12 @@ public class MapData {
     private void loadAndDraw() {
         Set<String> map = mapData.getStringSet("cityNames", new HashSet<>());
         if (map != null) {
-            map.forEach(name -> MapsActivity.drawCity(name, new LatLng(mapData.getFloat(name + "lat", 0f), mapData.getFloat(name + "lng", 0f)), false));
+            map.forEach(name -> MapsActivity.drawCity(name, getPos(name), false));
         }
+    }
+
+    public static LatLng getPos(String name) {
+        return new LatLng(mapData.getFloat(name + "lat", 0f), mapData.getFloat(name + "lng", 0f));
     }
 
     public static ArrayList<String> loadCityList() {

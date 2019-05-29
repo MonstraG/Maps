@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MeWasThere</string>
+    <string name="addCityBtnLoc">Add city</string>
+    <string name="cityLatFieldLoc">Latitude</string>
+    <string name="cityLngFieldLoc">Longitude</string>
+    <string name="cityNameFieldLoc">City name</string>
+    <string name="getLatLngFromApiBtnLoc">Get from API</string>
+    <string name="onMapBtnLoc">Pick on map</string>
+    <string name="title_activity_maps">Where I\'ve been</string>
+</resources>

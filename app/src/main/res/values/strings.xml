@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ГдеЯБыл</string>
+    <string name="title_activity_maps">ГдеЯБыл</string>
+    <string name="cityNameFieldLoc">Название города</string>
+    <string name="cityLatFieldLoc">Широта</string>
+    <string name="cityLngFieldLoc">Долгота</string>
+    <string name="addCityBtnLoc">Добавить город</string>
+    <string name="getLatLngFromApiBtnLoc">Из Интернета</string>
+    <string name="onMapBtnLoc">На карте</string>
+</resources>

@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ГдеЯБыл</string>
-    <string name="title_activity_maps">ГдеЯБыл</string>
+    <string name="app_name">My places</string>
+    <string name="title_activity_maps">My places</string>
     <string name="cityNameFieldLoc">Название города</string>
     <string name="cityLatFieldLoc">Широта</string>
     <string name="cityLngFieldLoc">Долгота</string>

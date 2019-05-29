@@ -71,7 +71,7 @@ public class AddCityActivity extends AppCompatActivity {
         Button addCityBtn = findViewById(R.id.addCityBtn);
         addCityBtn.setOnClickListener(view -> {
             try {
-                final String cityName = cityNameField.getText().toString();
+                final String cityName = cityNameField.getText().toString().trim();
                 final float cityLat = Float.parseFloat(cityLatField.getText().toString());
                 final float cityLng = Float.parseFloat(cityLngField.getText().toString());
                 storeCity(cityName, cityLat, cityLng);
@@ -92,7 +92,7 @@ public class AddCityActivity extends AppCompatActivity {
     private void getLatLngFromApiBtnInit() {
         Button getLatLngFromApiBtn = findViewById(R.id.getLatLngFromApiBtn);
         getLatLngFromApiBtn.setOnClickListener(view -> {
-            LatLng pos = getLocationFromAddress(cityNameField.getText().toString());
+            LatLng pos = getLocationFromAddress(cityNameField.getText().toString().trim());
             if (pos != null) {
                 String lat = Double.toString(pos.latitude);
                 if (lat.length() > 7)

@@ -2,10 +2,10 @@ package com.arseniy.maps.data;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.arseniy.maps.activities.MapsActivity;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,43 +18,59 @@ public class MapData {
 
     private static SharedPreferences.Editor mapDataEditor;
     private static SharedPreferences mapData;
+    private static Gson gson;
 
     public MapData(Context context) {
         mapData = getDefaultSharedPreferences(context);
-        mapDataEditor = mapData.edit();
-        if (mapData.getBoolean("!firststart", true)) {
-            mapDataEditor.clear();
+        gson = new Gson();
 
-            addCityToStorage("Екатеринбург", 56.8389, 60.6057);
-            addCityToStorage("Каир", 30.0444, 31.2357);
-            addCityToStorage("Москва", 55.7558, 37.6173);
-            addCityToStorage("Лондон", 51.5180, -0.1753);
-            addCityToStorage("Вена", 48.2082, 16.3738);
-            addCityToStorage("Берн", 46.9480, 7.4474);
-            addCityToStorage("Рим", 41.9099, 12.4964);
-            addCityToStorage("Париж", 48.8588, 2.2770);
-            addCityToStorage("Прага", 50.0595, 14.3255);
-            addCityToStorage("Будапешт", 47.4811, 18.9902);
+        transferStorageToJson();
 
-            mapDataEditor.putBoolean("!firststart", false);
-
-            mapDataEditor.apply();
-        }
         loadAndDraw();
     }
 
+    private void transferStorageToJson() {
+        ArrayList<String> cityNames = loadCityList();
+        if (mapData.contains(cityNames.get(0) + "lat") || mapData.contains(cityNames.get(0) + "lng")) {
+            cityNames.forEach(city -> {
+                LatLng pos = getPos(city);
+                removeCityFromStorageOld(city);
+                addCityToStorage(city, pos);
+            });
+        }
+    }
+
     public static void addCityToStorage(String name, double lat, double lng) {
-        mapDataEditor.putFloat(name + "lat", (float)lat);
-        mapDataEditor.putFloat(name + "lng", (float)lng);
+        addCityToStorage(name, new LatLng(lat, lng));
+    }
+
+
+    private static void addCityToStorage(String name, LatLng pos) {
+        mapDataEditor = mapData.edit();
+        City city = new City(name, pos);
+        mapDataEditor.putString(name, gson.toJson(city));
+
         ArrayList<String> cityNames = loadCityList();
         cityNames.add(name);
         mapDataEditor.putStringSet("cityNames", new HashSet<>(cityNames));
+
         mapDataEditor.apply();
-        Log.d("BuildCityCoordinates", "Stored city: " + name + " " + lat + " " + lng);
     }
 
     public static void removeCityFromStorage(String name) {
         try {
+            mapDataEditor = mapData.edit();
+            mapDataEditor.remove(name);
+            ArrayList<String> cityNames = loadCityList();
+            cityNames.remove(name);
+            mapDataEditor.putStringSet("cityNames", new HashSet<>(cityNames));
+            mapDataEditor.apply();
+        } catch (Exception ignored) {}
+    }
+
+    private static void removeCityFromStorageOld(String name) {
+        try {
+            mapDataEditor = mapData.edit();
             mapDataEditor.remove(name + "lat");
             mapDataEditor.remove(name + "lng");
             ArrayList<String> cityNames = loadCityList();
@@ -62,7 +78,6 @@ public class MapData {
             mapDataEditor.putStringSet("cityNames", new HashSet<>(cityNames));
             mapDataEditor.apply();
         } catch (Exception ignored) {}
-
     }
 
 
@@ -73,8 +88,10 @@ public class MapData {
         }
     }
 
+
     public static LatLng getPos(String name) {
-        return new LatLng(mapData.getFloat(name + "lat", 0f), mapData.getFloat(name + "lng", 0f));
+        City city = gson.fromJson(mapData.getString(name, ""), City.class);
+        return city.getlatLng();
     }
 
     public static ArrayList<String> loadCityList() {

@@ -29,7 +29,7 @@ public class AddCityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.create_city);
+        setContentView(R.layout.add_city);
 
         onMapBtnInit();
 
@@ -42,7 +42,13 @@ public class AddCityActivity extends AppCompatActivity {
         getLatLngFromApiBtnInit();
     }
 
-    private void onMapBtnInit() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cityNameField.requestFocus();
+    }
+
+        private void onMapBtnInit() {
         Button onMapBtn = findViewById(R.id.onMapBtn);
         onMapBtn.setOnClickListener(view -> {
             Intent intent = new Intent(this, PickLocationOnMapActivity.class);

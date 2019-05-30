@@ -15,11 +15,11 @@
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/cityNameFieldLoc"
-        android:inputType="textPersonName"
+        android:inputType="textPersonName|textCapWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="Autofill"/>
+        tools:ignore="Autofill" />
 
     <EditText
         android:id="@+id/cityLatField"

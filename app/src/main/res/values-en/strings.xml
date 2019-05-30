@@ -8,4 +8,5 @@
     <string name="getLatLngFromApiBtnLoc">Get from API</string>
     <string name="onMapBtnLoc">Pick on map</string>
     <string name="title_activity_maps">My places</string>
+    <string name="fromCurLocBtn">My location</string>
 </resources>

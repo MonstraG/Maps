@@ -5,8 +5,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.arseniy.maps.data.MapData;
 import com.arseniy.maps.R;
+import com.arseniy.maps.data.MapData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

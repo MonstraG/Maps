@@ -15,14 +15,9 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
 
     private ArrayList<String> cityNames;
 
-    static class CityViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        final TextView textView;
-
-        CityViewHolder(TextView v) {
-            super(v);
-            textView = v;
-        }
+    public CityAdapter(ArrayList<String> cities) {
+        cityNames = cities;
+        cityNames.sort(String::compareTo);
     }
 
     public ArrayList<String> getData() {
@@ -34,12 +29,6 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
         cityNames.sort(String::compareTo);
         notifyDataSetChanged();
     }
-
-    public CityAdapter(ArrayList<String> cities) {
-        cityNames = cities;
-        cityNames.sort(String::compareTo);
-    }
-
 
     @NonNull
     @Override
@@ -63,6 +52,16 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.CityViewHolder
     @Override
     public int getItemCount() {
         return cityNames.size();
+    }
+
+    static class CityViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        final TextView textView;
+
+        CityViewHolder(TextView v) {
+            super(v);
+            textView = v;
+        }
     }
 
 }

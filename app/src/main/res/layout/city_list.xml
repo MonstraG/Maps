@@ -9,11 +9,10 @@
         android:id="@+id/cityListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/city_text_view"/>
+        tools:listitem="@layout/city_text_view" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addCityFAB"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginEnd="16dp"
@@ -21,6 +20,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

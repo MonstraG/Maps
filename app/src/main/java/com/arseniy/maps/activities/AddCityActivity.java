@@ -1,7 +1,9 @@
 package com.arseniy.maps.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -9,12 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
-import com.arseniy.maps.data.MapData;
 import com.arseniy.maps.R;
+import com.arseniy.maps.data.MapData;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -40,6 +45,8 @@ public class AddCityActivity extends AppCompatActivity {
         addCityBtnInit();
         coder = new Geocoder(this);
         getLatLngFromApiBtnInit();
+
+        getFromCurLocBtnInit();
     }
 
     @Override
@@ -48,18 +55,22 @@ public class AddCityActivity extends AppCompatActivity {
         cityNameField.requestFocus();
     }
 
-        private void onMapBtnInit() {
+    private void onMapBtnInit() {
         Button onMapBtn = findViewById(R.id.onMapBtn);
-        onMapBtn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, PickLocationOnMapActivity.class);
-            try {
-                final double cityLat = Double.parseDouble(cityLatField.getText().toString());
-                final double cityLng = Double.parseDouble(cityLngField.getText().toString());
-                intent.putExtra("startingLat", cityLat);
-                intent.putExtra("startingLng", cityLng);
-            } catch (Exception ignored) {}
-            startActivityForResult(intent, 0);
-        });
+        onMapBtn.setOnClickListener(view -> callOnMapPick());
+    }
+
+    private void  callOnMapPick() {
+        Intent intent = new Intent(this, PickLocationOnMapActivity.class);
+        try {
+            final double cityLat = Double.parseDouble(cityLatField.getText().toString());
+            final double cityLng = Double.parseDouble(cityLngField.getText().toString());
+            intent.putExtra("startingLat", cityLat);
+            intent.putExtra("startingLng", cityLng);
+        } catch (Exception ignored) {
+        }
+
+        startActivityForResult(intent, 0);
     }
 
     @SuppressLint("SetTextI18n") //that will add commas instead of dots.
@@ -68,8 +79,7 @@ public class AddCityActivity extends AppCompatActivity {
         if (requestCode == resultCode) {
             final float lat = data.getFloatExtra("lat", 0f);
             final float lng = data.getFloatExtra("lng", 0f);
-            cityLatField.setText(Float.toString(lat));
-            cityLngField.setText(Float.toString(lng));
+            setLatLntData(new LatLng(lat, lng));
         }
     }
 
@@ -100,37 +110,61 @@ public class AddCityActivity extends AppCompatActivity {
         getLatLngFromApiBtn.setOnClickListener(view -> {
             LatLng pos = getLocationFromAddress(cityNameField.getText().toString().trim());
             if (pos != null) {
-                String lat = Double.toString(pos.latitude);
-                if (lat.length() > 7)
-                    lat = lat.substring(0, 7);
-                cityLatField.setText(lat);
-                String lng = Double.toString(pos.longitude);
-                if (lng.length() > 7)
-                    lng = lng.substring(0, 7);
-                cityLngField.setText(lng);
-
-                //show on map
-                Intent intent = new Intent(this, PickLocationOnMapActivity.class);
-                try {
-                    final double cityLat = Double.parseDouble(cityLatField.getText().toString());
-                    final double cityLng = Double.parseDouble(cityLngField.getText().toString());
-                    intent.putExtra("startingLat", cityLat);
-                    intent.putExtra("startingLng", cityLng);
-                } catch (Exception ignored) {}
-                startActivityForResult(intent, 0);
+                setLatLntData(pos);
+                callOnMapPick();
             }
         });
     }
 
-    private LatLng getLocationFromAddress(String strAddress){
+    private LatLng getLocationFromAddress(String strAddress) {
         try {
-            List<Address> address = coder.getFromLocationName(strAddress,1);
+            List<Address> address = coder.getFromLocationName(strAddress, 1);
             if (address != null && address.size() > 0) {
                 Address location = address.get(0);
                 return new LatLng(location.getLatitude(), location.getLongitude());
             }
-        } catch (IOException ignored) { }
+        } catch (IOException ignored) {
+        }
+
         Toast.makeText(this, "Нет интернет-соединения или такой город не найден.", Toast.LENGTH_SHORT).show();
         return null;
+    }
+
+    private void getFromCurLocBtnInit() {
+        Button fromCurLocBtn = findViewById(R.id.fromCurLocBtn);
+        fromCurLocBtn.setOnClickListener(view -> {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+            }
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(result -> setLatLntData(new LatLng(result.getLatitude(), result.getLongitude())));
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(result -> setLatLntData(new LatLng(result.getLatitude(), result.getLongitude())));
+            }
+        } else {
+            Toast.makeText(this, "Неудалось получить локацию - разрешение не выдано.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void setLatLntData(LatLng pos) {
+        if (pos != null) {
+            String lat = Double.toString(pos.latitude);
+            if (lat.length() > 7)
+                lat = lat.substring(0, 7);
+            cityLatField.setText(lat);
+            String lng = Double.toString(pos.longitude);
+            if (lng.length() > 7)
+                lng = lng.substring(0, 7);
+            cityLngField.setText(lng);
+        }
     }
 }

@@ -8,4 +8,5 @@
     <string name="addCityBtnLoc">Добавить город</string>
     <string name="getLatLngFromApiBtnLoc">Из Интернета</string>
     <string name="onMapBtnLoc">На карте</string>
+    <string name="fromCurLocBtn">По геолокации</string>
 </resources>

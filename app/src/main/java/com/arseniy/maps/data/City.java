@@ -3,15 +3,14 @@ package com.arseniy.maps.data;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
 
 public class City {
@@ -37,19 +36,20 @@ public class City {
         this.latLng = new LatLng(latitude, longitude);
         this.dateTimeOfCreation = Calendar.getInstance().getTime();
     }
-    
-    //only for deserialization
-    private City() {}
 
-    public String getName() {
+    //only for deserialization
+    private City() {
+    }
+
+    private String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
-    LatLng getlatLng() {
+    LatLng getLatLng() {
         return latLng;
     }
 
@@ -86,7 +86,7 @@ public class City {
     }
 
 
-    public static class CityAdapter extends TypeAdapter<City> {
+    private static class CityAdapter extends TypeAdapter<City> {
 
         @Override
         public void write(JsonWriter out, City value) throws IOException {
@@ -104,7 +104,7 @@ public class City {
             City city = new City();
             double latitude = 0.0;
             double longitude = 0.0;
-            
+
             while (in.hasNext()) {
                 String name = in.nextName();
                 switch (name) {
@@ -126,7 +126,7 @@ public class City {
                 }
             }
             in.endObject();
-            
+
             city.setLatLng(latitude, longitude);
 
             return city;

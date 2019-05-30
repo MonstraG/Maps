@@ -6,8 +6,8 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.arseniy.maps.data.MapData;
 import com.arseniy.maps.R;
+import com.arseniy.maps.data.MapData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,6 +25,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static GoogleMap mMap;
 
+    public static void drawCity(String name, LatLng pos, Boolean moveCamera) {
+        Log.d("drawCity", "Loaded city: " + name + " " + pos.latitude + " " + pos.longitude);
+        mMap.addMarker(new MarkerOptions().position(pos).title(name));
+        if (moveCamera)
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,20 +45,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fab.setOnClickListener(view -> startActivity(new Intent(this, ListActivity.class)));
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         new MapData(this);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(pickRandomCameraPos()));
-    }
-
-    public static void drawCity(String name, LatLng pos, Boolean moveCamera) {
-        Log.d("drawCity", "Loaded city: " + name + " " + pos.latitude + " " + pos.longitude);
-        mMap.addMarker(new MarkerOptions().position(pos).title(name));
-        if (moveCamera)
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(pos));
     }
 
     private LatLng pickRandomCameraPos() {

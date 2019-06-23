@@ -72,11 +72,17 @@ class MapData(context: Context) {
         private fun removeCityFromStorageOld(name: String) {
             try {
                 mapDataEditor = mapData!!.edit()
+
+                //remove old storage types
                 mapDataEditor!!.remove(name + "lat")
                 mapDataEditor!!.remove(name + "lng")
+
+                //remove city from list
                 val cityNames = loadCityList()
                 cityNames.remove(name)
                 mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
+
+                //apply and log
                 mapDataEditor!!.apply()
                 Log.d("MapData-Old", "Removed city$name")
             } catch (ignored: Exception) { }
@@ -88,12 +94,16 @@ class MapData(context: Context) {
 
         private fun addCityToStorage(name: String, pos: LatLng) {
             mapDataEditor = mapData!!.edit()
+
+            //add city data
             val city = City(name, pos)
             mapDataEditor!!.putString(name, gson!!.toJson(city))
 
+            //add city to list
             val cityNames = loadCityList()
             cityNames.add(name)
             mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
+
             mapDataEditor!!.apply()
             Log.d("MapData", "Added city $name, pos $pos")
         }
@@ -101,14 +111,18 @@ class MapData(context: Context) {
         fun removeCityFromStorage(name: String) {
             try {
                 mapDataEditor = mapData!!.edit()
+
+                //remove city from prefs
                 mapDataEditor!!.remove(name)
+
+                //remove city from list
                 val cityNames = loadCityList()
                 cityNames.remove(name)
                 mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
+
                 mapDataEditor!!.apply()
                 Log.d("MapData", "Removed city $name")
-            } catch (ignored: Exception) {
-            }
+            } catch (ignored: Exception) { }
         }
 
         fun getPos(name: String): LatLng? {

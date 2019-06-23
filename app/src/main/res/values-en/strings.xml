@@ -9,4 +9,5 @@
     <string name="onMapBtnLoc">Pick on map</string>
     <string name="title_activity_maps">My places</string>
     <string name="fromCurLocBtn">My location</string>
+    <string name="countryField">Country</string>
 </resources>

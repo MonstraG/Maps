@@ -35,14 +35,11 @@ class MapData(context: Context) {
     }
 
     private fun transferStorageToJson() {
-        val cityNames = loadCityList()
-        if (cityNames.size > 0) {
-            if (mapData!!.contains(cityNames[0] + "lat") || mapData!!.contains(cityNames[0] + "lng")) {
-                cityNames.forEach { city ->
-                    val pos = getPosOldWay(city)
-                    removeCityFromStorageOld(city)
-                    addCityToStorage(city, pos)
-                }
+        loadCityList().forEach { city ->
+            if (mapData!!.contains(city + "lat") || mapData!!.contains(city + "lng")) {
+                val pos = getPosOldWay(city)
+                removeCityFromStorageOld(city)
+                addCityToStorage(city, pos, "")
             }
         }
     }
@@ -66,7 +63,7 @@ class MapData(context: Context) {
 
         private fun getPosOldWay(name: String): LatLng {
             return LatLng(mapData!!.getFloat(name + "lat", 0f).toDouble(),
-                    mapData!!.getFloat(name + "lng", 0f).toDouble())
+                          mapData!!.getFloat(name + "lng", 0f).toDouble())
         }
 
         private fun removeCityFromStorageOld(name: String) {
@@ -88,15 +85,15 @@ class MapData(context: Context) {
             } catch (ignored: Exception) { }
         }
 
-        fun addCityToStorage(name: String, lat: Double, lng: Double) {
-            addCityToStorage(name, LatLng(lat, lng))
+        fun addCityToStorage(name: String, lat: Double, lng: Double, country: String) {
+            addCityToStorage(name, LatLng(lat, lng), country)
         }
 
-        private fun addCityToStorage(name: String, pos: LatLng) {
+        private fun addCityToStorage(name: String, pos: LatLng, country: String) {
             mapDataEditor = mapData!!.edit()
 
             //add city data
-            val city = City(name, pos)
+            val city = City(name, pos, country)
             mapDataEditor!!.putString(name, gson!!.toJson(city))
 
             //add city to list
@@ -126,11 +123,10 @@ class MapData(context: Context) {
         }
 
         fun getPos(name: String): LatLng? {
-            val city = gson!!.fromJson(mapData!!.getString(name, ""), City::class.java)
-            return city.latLng
+            return gson!!.fromJson(mapData!!.getString(name, ""), City::class.java).latLng
         }
 
-        fun loadCityList(): ArrayList<String> {
+        fun loadCityList(): ArrayList<String> { //arrayList instead of MutableSet, because CityAdapter has sort.
             return ArrayList(mapData!!.getStringSet("cityNames", HashSet()))
         }
     }

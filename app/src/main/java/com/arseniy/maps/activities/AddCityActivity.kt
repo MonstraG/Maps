@@ -24,6 +24,7 @@ class AddCityActivity : AppCompatActivity() {
     private var cityNameField: EditText? = null
     private var cityLatField: EditText? = null
     private var cityLngField: EditText? = null
+    private var countryField: EditText? = null
     private var coder: Geocoder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,7 @@ class AddCityActivity : AppCompatActivity() {
         cityNameField = findViewById(R.id.cityNameField)
         cityLatField = findViewById(R.id.cityLatField)
         cityLngField = findViewById(R.id.cityLngField)
+        countryField = findViewById(R.id.countryField)
 
         coder = Geocoder(this)
 
@@ -79,9 +81,10 @@ class AddCityActivity : AppCompatActivity() {
         addCityBtn.setOnClickListener {
             try {
                 val cityName = cityNameField!!.text.toString().trim { it <= ' ' }
-                val cityLat = java.lang.Float.parseFloat(cityLatField!!.text.toString())
-                val cityLng = java.lang.Float.parseFloat(cityLngField!!.text.toString())
-                storeCity(cityName, cityLat, cityLng)
+                val cityLat = cityLatField!!.text.toString().toFloat()
+                val cityLng = cityLngField!!.text.toString().toFloat()
+                val country = countryField!!.text.toString()
+                storeCity(cityName, cityLat, cityLng, country)
                 this.finish()
             } catch (e: Exception) {
                 setResult(-1)
@@ -90,8 +93,8 @@ class AddCityActivity : AppCompatActivity() {
         }
     }
 
-    private fun storeCity(name: String, lat: Float, lng: Float) {
-        MapData.addCityToStorage(name, lat.toDouble(), lng.toDouble()) //sharedPrefs
+    private fun storeCity(name: String, lat: Float, lng: Float, country: String) {
+        MapData.addCityToStorage(name, lat.toDouble(), lng.toDouble(), country) //sharedPrefs
         setResult(0, Intent().putExtra("cityName", name)) //list
     }
 

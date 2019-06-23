@@ -30,16 +30,15 @@ class AddCityActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_city)
 
-        onMapBtnInit()
-
         cityNameField = findViewById(R.id.cityNameField)
         cityLatField = findViewById(R.id.cityLatField)
         cityLngField = findViewById(R.id.cityLngField)
 
-        addCityBtnInit()
         coder = Geocoder(this)
-        getLatLngFromApiBtnInit()
 
+        onMapBtnInit()
+        addCityBtnInit()
+        getLatLngFromApiBtnInit()
         getFromCurLocBtnInit()
     }
 
@@ -60,8 +59,7 @@ class AddCityActivity : AppCompatActivity() {
             val cityLng = java.lang.Double.parseDouble(cityLngField!!.text.toString())
             intent.putExtra("startingLat", cityLat)
             intent.putExtra("startingLng", cityLng)
-        } catch (ignored: Exception) {
-        }
+        } catch (ignored: Exception) { }
 
         startActivityForResult(intent, 0)
     }
@@ -116,8 +114,7 @@ class AddCityActivity : AppCompatActivity() {
                 val location = address[0]
                 return LatLng(location.latitude, location.longitude)
             }
-        } catch (ignored: IOException) {
-        }
+        } catch (ignored: IOException) { }
 
         Toast.makeText(this, "Нет интернет-соединения или такой город не найден.", Toast.LENGTH_SHORT).show()
         return null
@@ -149,14 +146,8 @@ class AddCityActivity : AppCompatActivity() {
 
     private fun setLatLntData(pos: LatLng?) {
         if (pos != null) {
-            var lat = pos.latitude.toString()
-            if (lat.length > 7)
-                lat = lat.substring(0, 7)
-            cityLatField!!.setText(lat)
-            var lng = pos.longitude.toString()
-            if (lng.length > 7)
-                lng = lng.substring(0, 7)
-            cityLngField!!.setText(lng)
+            cityLatField!!.setText(String.format("%.4f", pos.latitude))
+            cityLngField!!.setText(String.format("%.4f", pos.longitude))
         }
     }
 }

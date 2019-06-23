@@ -11,7 +11,6 @@ import com.google.gson.Gson
 
 import java.util.ArrayList
 import java.util.HashSet
-import java.util.Objects
 
 import android.preference.PreferenceManager.getDefaultSharedPreferences
 
@@ -38,7 +37,7 @@ class MapData(context: Context) {
     private fun transferStorageToJson() {
         val cityNames = loadCityList()
         if (cityNames.size > 0) {
-            if (mapData.contains(cityNames[0] + "lat") || mapData.contains(cityNames[0] + "lng")) {
+            if (mapData!!.contains(cityNames[0] + "lat") || mapData!!.contains(cityNames[0] + "lng")) {
                 cityNames.forEach { city ->
                     val pos = getPosOldWay(city)
                     removeCityFromStorageOld(city)
@@ -50,28 +49,29 @@ class MapData(context: Context) {
 
     private fun debugPrintAllData() {
         Log.d("data", "ALL AVAILABLE DATA")
-        mapData.all.entries.forEach { entry -> Log.d("data", entry.key + " " + entry.value) }
+        mapData!!.all.entries.forEach { entry -> Log.d("data", entry.key + " " + entry.value) }
         Log.d("data", "END OF AVAILABLE DATA")
 
     }
 
     private fun loadAndDraw() {
-        val map = mapData.getStringSet("cityNames", HashSet())
+        val map = mapData!!.getStringSet("cityNames", HashSet())
         map?.forEach { name -> MapsActivity.drawCity(name, getPos(name)!!, false) }
     }
 
     companion object {
         private var mapDataEditor: SharedPreferences.Editor? = null
-        private lateinit var mapData: SharedPreferences
-        private lateinit var gson: Gson
+        private var mapData: SharedPreferences? = null
+        private var gson: Gson? = null
 
         private fun getPosOldWay(name: String): LatLng {
-            return LatLng(mapData.getFloat(name + "lat", 0f).toDouble(), mapData.getFloat(name + "lng", 0f).toDouble())
+            return LatLng(mapData!!.getFloat(name + "lat", 0f).toDouble(),
+                    mapData!!.getFloat(name + "lng", 0f).toDouble())
         }
 
         private fun removeCityFromStorageOld(name: String) {
             try {
-                mapDataEditor = mapData.edit()
+                mapDataEditor = mapData!!.edit()
                 mapDataEditor!!.remove(name + "lat")
                 mapDataEditor!!.remove(name + "lng")
                 val cityNames = loadCityList()
@@ -79,9 +79,7 @@ class MapData(context: Context) {
                 mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
                 mapDataEditor!!.apply()
                 Log.d("MapData-Old", "Removed city$name")
-            } catch (ignored: Exception) {
-            }
-
+            } catch (ignored: Exception) { }
         }
 
         fun addCityToStorage(name: String, lat: Double, lng: Double) {
@@ -89,9 +87,9 @@ class MapData(context: Context) {
         }
 
         private fun addCityToStorage(name: String, pos: LatLng) {
-            mapDataEditor = mapData.edit()
+            mapDataEditor = mapData!!.edit()
             val city = City(name, pos)
-            mapDataEditor!!.putString(name, gson.toJson(city))
+            mapDataEditor!!.putString(name, gson!!.toJson(city))
 
             val cityNames = loadCityList()
             cityNames.add(name)
@@ -102,7 +100,7 @@ class MapData(context: Context) {
 
         fun removeCityFromStorage(name: String) {
             try {
-                mapDataEditor = mapData.edit()
+                mapDataEditor = mapData!!.edit()
                 mapDataEditor!!.remove(name)
                 val cityNames = loadCityList()
                 cityNames.remove(name)
@@ -114,12 +112,12 @@ class MapData(context: Context) {
         }
 
         fun getPos(name: String): LatLng? {
-            val city = gson.fromJson(mapData.getString(name, ""), City::class.java)
+            val city = gson!!.fromJson(mapData!!.getString(name, ""), City::class.java)
             return city.latLng
         }
 
         fun loadCityList(): ArrayList<String> {
-            return ArrayList(Objects.requireNonNull(mapData.getStringSet("cityNames", HashSet())))
+            return ArrayList(mapData!!.getStringSet("cityNames", HashSet()))
         }
     }
 }

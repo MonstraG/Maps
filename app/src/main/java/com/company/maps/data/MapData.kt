@@ -1,11 +1,11 @@
-package com.arseniy.maps.data
+package com.company.maps.data
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.util.Log
 
-import com.arseniy.maps.activities.MapsActivity
+import com.company.maps.activities.MapsActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 

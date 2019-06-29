@@ -1,4 +1,4 @@
-package com.arseniy.maps.data
+package com.company.maps.data
 
 import com.google.android.gms.maps.model.LatLng
 import java.util.Calendar

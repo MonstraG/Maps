@@ -1,4 +1,4 @@
-package com.arseniy.maps.activities
+package com.company.maps.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-import com.arseniy.maps.R
-import com.arseniy.maps.data.CityAdapter
-import com.arseniy.maps.data.MapData
+import com.company.maps.R
+import com.company.maps.data.CityAdapter
+import com.company.maps.data.MapData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListActivity : AppCompatActivity() {

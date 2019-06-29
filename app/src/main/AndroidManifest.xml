@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="com.arseniy.maps">
+    package="com.company.maps">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +23,7 @@
 
         <!-- main activity -->
         <activity
-            android:name=".activities.MapsActivity"
+            android:name="com.company.maps.activities.MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,13 +35,13 @@
 
         <!-- additional activities -->
         <activity
-            android:name=".activities.ListActivity"
-            android:parentActivityName=".activities.MapsActivity" />
+            android:name="com.company.maps.activities.ListActivity"
+            android:parentActivityName="com.company.maps.activities.MapsActivity" />
         <activity
-            android:name=".activities.AddCityActivity"
-            android:parentActivityName=".activities.ListActivity" />
+            android:name="com.company.maps.activities.AddCityActivity"
+            android:parentActivityName="com.company.maps.activities.ListActivity" />
         <activity
-            android:name=".activities.PickLocationOnMapActivity"
-            android:parentActivityName=".activities.AddCityActivity" />
+            android:name="com.company.maps.activities.PickLocationOnMapActivity"
+            android:parentActivityName="com.company.maps.activities.AddCityActivity" />
     </application>
 </manifest>

@@ -1,4 +1,4 @@
-package com.arseniy.maps.activities
+package com.company.maps.activities
 
 import android.Manifest
 import android.content.Intent
@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
-import com.arseniy.maps.R
-import com.arseniy.maps.data.MapData
+import com.company.maps.R
+import com.company.maps.data.MapData
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 

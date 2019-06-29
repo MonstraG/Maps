@@ -1,4 +1,4 @@
-package com.arseniy.maps.activities
+package com.company.maps.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,8 @@ import android.util.Log
 
 import androidx.fragment.app.FragmentActivity
 
-import com.arseniy.maps.R
-import com.arseniy.maps.data.MapData
+import com.company.maps.R
+import com.company.maps.data.MapData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

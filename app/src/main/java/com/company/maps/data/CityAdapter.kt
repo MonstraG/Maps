@@ -1,11 +1,11 @@
-package com.arseniy.maps.data
+package com.company.maps.data
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-import com.arseniy.maps.R
+import com.company.maps.R
 
 class CityAdapter(private var cityNames: MutableList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 

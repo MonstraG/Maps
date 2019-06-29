@@ -20,8 +20,7 @@ import java.util.Objects
 
 class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
-    private var lat: Float = 0f
-    private var lng: Float = 0f
+    private var selectedLocation: LatLng = LatLng(0.0, 0.0)
     private var marker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +38,8 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
     private fun fabInit() {
         val fab = findViewById<FloatingActionButton>(R.id.okFAB)
         fab.setOnClickListener {
-            setResult(0, Intent().putExtra("lat", lat).putExtra("lng", lng))
+            setResult(0, Intent().putExtra("pickedLat", selectedLocation.latitude)
+                    .putExtra("lng", selectedLocation.longitude))
             this.finish()
         }
     }
@@ -59,11 +59,10 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
     private fun addMarker(map: GoogleMap, latLng: LatLng, zoom: Boolean) {
         marker?.remove()
         marker = map.addMarker(MarkerOptions().draggable(true).position(latLng))
-        lat = latLng.latitude.toFloat()
-        lng = latLng.longitude.toFloat()
+        selectedLocation = latLng
 
         if (zoom) {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0F))
         } else
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng))
     }

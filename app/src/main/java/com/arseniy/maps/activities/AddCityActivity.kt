@@ -57,10 +57,8 @@ class AddCityActivity : AppCompatActivity() {
     private fun callOnMapPick() {
         val intent = Intent(this, PickLocationOnMapActivity::class.java)
         try {
-            val cityLat = java.lang.Double.parseDouble(cityLatField!!.text.toString())
-            val cityLng = java.lang.Double.parseDouble(cityLngField!!.text.toString())
-            intent.putExtra("startingLat", cityLat)
-            intent.putExtra("startingLng", cityLng)
+            intent.putExtra("startingLat", cityLatField!!.text.toString().toDouble())
+            intent.putExtra("startingLng", cityLngField!!.text.toString().toDouble())
         } catch (ignored: Exception) { }
 
         startActivityForResult(intent, 0)
@@ -70,9 +68,10 @@ class AddCityActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == resultCode) {
-            val lat = data!!.getFloatExtra("lat", 0f)
-            val lng = data.getFloatExtra("lng", 0f)
-            setLatLntData(LatLng(lat.toDouble(), lng.toDouble()))
+            setLatLntData(LatLng(
+                    data!!.getDoubleExtra("lat", 0.0),
+                    data.getDoubleExtra("lng", 0.0)
+            ))
         }
     }
 
@@ -81,8 +80,8 @@ class AddCityActivity : AppCompatActivity() {
         addCityBtn.setOnClickListener {
             try {
                 val cityName = cityNameField!!.text.toString().trim { it <= ' ' }
-                val cityLat = cityLatField!!.text.toString().toFloat()
-                val cityLng = cityLngField!!.text.toString().toFloat()
+                val cityLat = cityLatField!!.text.toString().toDouble()
+                val cityLng = cityLngField!!.text.toString().toDouble()
                 val country = countryField!!.text.toString()
                 storeCity(cityName, cityLat, cityLng, country)
                 this.finish()
@@ -93,8 +92,8 @@ class AddCityActivity : AppCompatActivity() {
         }
     }
 
-    private fun storeCity(name: String, lat: Float, lng: Float, country: String) {
-        MapData.addCityToStorage(name, lat.toDouble(), lng.toDouble(), country) //sharedPrefs
+    private fun storeCity(name: String, lat: Double, lng: Double, country: String) {
+        MapData.addCityToStorage(name, lat, lng, country) //sharedPrefs
         setResult(0, Intent().putExtra("cityName", name)) //list
     }
 
@@ -147,10 +146,8 @@ class AddCityActivity : AppCompatActivity() {
         }
     }
 
-    private fun setLatLntData(pos: LatLng?) {
-        if (pos != null) {
-            cityLatField!!.setText(String.format("%.4f", pos.latitude))
-            cityLngField!!.setText(String.format("%.4f", pos.longitude))
-        }
+    private fun setLatLntData(pos: LatLng) {
+        cityLatField!!.setText(String.format("%.4f", pos.latitude))
+        cityLngField!!.setText(String.format("%.4f", pos.longitude))
     }
 }

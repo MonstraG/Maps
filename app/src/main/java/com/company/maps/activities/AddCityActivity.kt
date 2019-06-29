@@ -33,7 +33,7 @@ class AddCityActivity : AppCompatActivity() {
         cityNameField = findViewById(R.id.cityNameField)
         cityLatField = findViewById(R.id.cityLatField)
         cityLngField = findViewById(R.id.cityLngField)
-        countryField = findViewById(R.id.countryField)
+        countryField = findViewById(R.id.countryNameField)
 
         coder = Geocoder(this)
 
@@ -85,7 +85,7 @@ class AddCityActivity : AppCompatActivity() {
                 this.finish()
             } catch (e: Exception) {
                 setResult(-1)
-                Toast.makeText(this, "Ошибка создания записи, проверьте данные.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.toastCannotCreate, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -103,7 +103,7 @@ class AddCityActivity : AppCompatActivity() {
                 setLatLntData(pos)
                 callOnMapPick()
             } else {
-                Toast.makeText(this, "Ошибка получения данных из интернета, проверьте название города", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, R.string.toastApiError, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -117,7 +117,7 @@ class AddCityActivity : AppCompatActivity() {
             }
         } catch (ignored: IOException) { }
 
-        Toast.makeText(this, "Нет интернет-соединения или такой город не найден.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, R.string.toastNoNetworkOrNotFound, Toast.LENGTH_SHORT).show()
         return null
     }
 
@@ -141,7 +141,7 @@ class AddCityActivity : AppCompatActivity() {
                 mFusedLocationClient.lastLocation.addOnSuccessListener { result -> setLatLntData(LatLng(result.latitude, result.longitude)) }
             }
         } else {
-            Toast.makeText(this, "Неудалось получить локацию - разрешение не выдано.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,  R.string.toastGeoNoPermission, Toast.LENGTH_SHORT).show()
         }
     }
 

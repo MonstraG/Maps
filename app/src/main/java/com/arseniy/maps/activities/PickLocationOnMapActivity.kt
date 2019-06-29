@@ -20,8 +20,8 @@ import java.util.Objects
 
 class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
-    private var lat: Float = 0.toFloat()
-    private var lng: Float = 0.toFloat()
+    private var lat: Float = 0f
+    private var lng: Float = 0f
     private var marker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,31 +46,25 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
 
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
         MapData(this)
 
         val callingIntent = intent
         if (callingIntent.hasExtra("startingLat") && callingIntent.hasExtra("startingLng")) {
-            addMarker(LatLng(callingIntent.getDoubleExtra("startingLat", 0.0), callingIntent.getDoubleExtra("startingLng", 0.0)), true)
+            addMarker(googleMap, LatLng(callingIntent.getDoubleExtra("startingLat", 0.0), callingIntent.getDoubleExtra("startingLng", 0.0)), true)
         }
 
-        mMap!!.setOnMapClickListener { latLng -> addMarker(latLng, false) }
+        googleMap.setOnMapClickListener { latLng -> addMarker(googleMap, latLng, false) }
     }
 
-    private fun addMarker(latLng: LatLng, zoom: Boolean?) {
-        if (marker != null)
-            marker!!.remove()
-        marker = mMap!!.addMarker(MarkerOptions().draggable(true).position(latLng))
+    private fun addMarker(map: GoogleMap, latLng: LatLng, zoom: Boolean) {
+        marker?.remove()
+        marker = map.addMarker(MarkerOptions().draggable(true).position(latLng))
         lat = latLng.latitude.toFloat()
         lng = latLng.longitude.toFloat()
 
-        if (zoom!!) {
-            mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f))
+        if (zoom) {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f))
         } else
-            mMap!!.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-    }
-
-    companion object {
-        private var mMap: GoogleMap? = null
+            map.moveCamera(CameraUpdateFactory.newLatLng(latLng))
     }
 }

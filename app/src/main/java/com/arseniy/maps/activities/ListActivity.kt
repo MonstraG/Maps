@@ -50,10 +50,10 @@ class ListActivity : AppCompatActivity() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == resultCode) {
-            val cityName = data!!.getStringExtra("cityName")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == resultCode && intent != null) {
+            val cityName = intent.getStringExtra("cityName")
             val cityNamesList = (mAdapter as CityAdapter).data
             cityNamesList!!.add(cityName)
             (mAdapter as CityAdapter).data = cityNamesList

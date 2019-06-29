@@ -1,7 +1,6 @@
 package com.arseniy.maps.activities
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -64,13 +63,12 @@ class AddCityActivity : AppCompatActivity() {
         startActivityForResult(intent, 0)
     }
 
-    @SuppressLint("SetTextI18n") //that will add commas instead of dots.
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == resultCode) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+        super.onActivityResult(requestCode, resultCode, intent)
+        if (requestCode == resultCode && intent != null) {
             setLatLntData(LatLng(
-                    data!!.getDoubleExtra("lat", 0.0),
-                    data.getDoubleExtra("lng", 0.0)
+                    intent.getDoubleExtra("lat", 0.0),
+                    intent.getDoubleExtra("lng", 0.0)
             ))
         }
     }
@@ -97,7 +95,6 @@ class AddCityActivity : AppCompatActivity() {
         setResult(0, Intent().putExtra("cityName", name)) //list
     }
 
-    @SuppressLint("SetTextI18n") //that will add commas instead of dots.
     private fun getLatLngFromApiBtnInit() {
         val getLatLngFromApiBtn = findViewById<Button>(R.id.getLatLngFromApiBtn)
         getLatLngFromApiBtn.setOnClickListener {
@@ -105,6 +102,8 @@ class AddCityActivity : AppCompatActivity() {
             if (pos != null) {
                 setLatLntData(pos)
                 callOnMapPick()
+            } else {
+                Toast.makeText(this, "Ошибка получения данных из интернета, проверьте название города", Toast.LENGTH_SHORT).show()
             }
         }
     }

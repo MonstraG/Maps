@@ -53,10 +53,7 @@ class ListActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (requestCode == resultCode && intent != null) {
-            val cityName = intent.getStringExtra("cityName")
-            val cityNamesList = (mAdapter as CityAdapter).data
-            cityNamesList!!.add(cityName)
-            (mAdapter as CityAdapter).data = cityNamesList
+            (mAdapter as CityAdapter).data!!.add(intent.getStringExtra("cityName"))
         }
     }
 

@@ -7,20 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.arseniy.maps.R
 
-import java.util.ArrayList
+class CityAdapter(private var cityNames: MutableList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
-class CityAdapter(private var cityNames: ArrayList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
-
-    var data: ArrayList<String>?
+    var data: MutableList<String>?
         get() = cityNames
-        set(newArrayList) {
-            cityNames = newArrayList
-            cityNames!!.sortWith(Comparator { obj, anotherString -> obj.compareTo(anotherString) })
+        set(newList) {
+            cityNames = newList!!.sorted().toMutableList()
             notifyDataSetChanged()
         }
 
     init {
-        cityNames!!.sortWith(Comparator { obj, anotherString -> obj.compareTo(anotherString) })
+        cityNames!!.sorted()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {

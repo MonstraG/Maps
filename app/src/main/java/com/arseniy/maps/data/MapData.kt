@@ -21,7 +21,6 @@ class MapData(context: Context) {
         val isDebug = appFlags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 
         mapData = getDefaultSharedPreferences(context)
-        gson = Gson()
 
         if (isDebug)
             debugPrintAllData()
@@ -57,9 +56,8 @@ class MapData(context: Context) {
     }
 
     companion object {
-        private var mapDataEditor: SharedPreferences.Editor? = null
         private var mapData: SharedPreferences? = null
-        private var gson: Gson? = null
+        private var gson: Gson = Gson()
 
         private fun getPosOldWay(name: String): LatLng {
             return LatLng(mapData!!.getFloat(name + "lat", 0f).toDouble(),
@@ -68,19 +66,15 @@ class MapData(context: Context) {
 
         private fun removeCityFromStorageOld(name: String) {
             try {
-                mapDataEditor = mapData!!.edit()
-
-                //remove old storage types
-                mapDataEditor!!.remove(name + "lat")
-                mapDataEditor!!.remove(name + "lng")
-
-                //remove city from list
                 val cityNames = loadCityList()
                 cityNames.remove(name)
-                mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
 
-                //apply and log
-                mapDataEditor!!.apply()
+                mapData!!.edit()
+                        .remove(name + "lat")
+                        .remove(name + "lng")
+                        .putStringSet("cityNames", HashSet(cityNames))
+                        .apply()
+
                 Log.d("MapData-Old", "Removed city$name")
             } catch (ignored: Exception) { }
         }
@@ -90,40 +84,32 @@ class MapData(context: Context) {
         }
 
         private fun addCityToStorage(name: String, pos: LatLng, country: String) {
-            mapDataEditor = mapData!!.edit()
-
-            //add city data
             val city = City(name, pos, country)
-            mapDataEditor!!.putString(name, gson!!.toJson(city))
-
-            //add city to list
             val cityNames = loadCityList()
             cityNames.add(name)
-            mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
 
-            mapDataEditor!!.apply()
+            mapData!!.edit()
+                    .putString(name, gson.toJson(city)) //data
+                    .putStringSet("cityNames", HashSet(cityNames)) //list
+                    .apply()
+
             Log.d("MapData", "Added city $name, pos $pos")
         }
 
         fun removeCityFromStorage(name: String) {
-            try {
-                mapDataEditor = mapData!!.edit()
+            val cityNames = loadCityList()
+            cityNames.remove(name)
 
-                //remove city from prefs
-                mapDataEditor!!.remove(name)
+            mapData!!.edit()
+                    .remove(name) //remove city data
+                    .putStringSet("cityNames", HashSet(cityNames)) //remove from list
+                    .apply()
 
-                //remove city from list
-                val cityNames = loadCityList()
-                cityNames.remove(name)
-                mapDataEditor!!.putStringSet("cityNames", HashSet(cityNames))
-
-                mapDataEditor!!.apply()
-                Log.d("MapData", "Removed city $name")
-            } catch (ignored: Exception) { }
+            Log.d("MapData", "Removed city $name")
         }
 
         fun getPos(name: String): LatLng? {
-            return gson!!.fromJson(mapData!!.getString(name, ""), City::class.java).latLng
+            return gson.fromJson(mapData!!.getString(name, ""), City::class.java).latLng
         }
 
         fun loadCityList(): ArrayList<String> { //arrayList instead of MutableSet, because CityAdapter has sort.

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.company.maps.R
+import com.company.maps.activities.city.AddCityActivity
 import com.company.maps.data.CityAdapter
 import com.company.maps.data.MapData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,20 +32,16 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.city_list)
+
         val recyclerView = findViewById<RecyclerView>(R.id.cityListView)
-
         recyclerView.setHasFixedSize(true)
-
-        val layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
-
+        recyclerView.layoutManager =  LinearLayoutManager(this)
         mAdapter = CityAdapter(MapData.loadCityList())
         recyclerView.adapter = mAdapter
 
         //FAB
         val fab = findViewById<FloatingActionButton>(R.id.addCityFAB)
         fab.setOnClickListener { startActivityForResult(Intent(this, AddCityActivity::class.java), 0) }
-
 
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)

@@ -31,19 +31,24 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment?
         Objects.requireNonNull<SupportMapFragment>(mapFragment).getMapAsync(this)
 
-
         fabInit()
     }
 
     private fun fabInit() {
         val fab = findViewById<FloatingActionButton>(R.id.okFAB)
-        fab.setOnClickListener {
-            setResult(0, Intent().putExtra("pickedLat", selectedLocation.latitude)
-                    .putExtra("lng", selectedLocation.longitude))
-            this.finish()
-        }
+        fab.setOnClickListener { done() }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        done()
+    }
+
+    private fun done() {
+        setResult(0, Intent().putExtra("pickedLat", selectedLocation.latitude)
+                .putExtra("lng", selectedLocation.longitude))
+        this.finish()
+    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         MapData(this)

@@ -40,11 +40,10 @@ class ListActivity : AppCompatActivity() {
         recyclerView.adapter = mAdapter
 
         //FAB
-        val fab = findViewById<FloatingActionButton>(R.id.addCityFAB)
-        fab.setOnClickListener { startActivityForResult(Intent(this, AddCityActivity::class.java), 0) }
+        findViewById<FloatingActionButton>(R.id.addCityFAB).setOnClickListener {
+            startActivityForResult(Intent(this, AddCityActivity::class.java), 0) }
 
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {

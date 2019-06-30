@@ -48,9 +48,8 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         MapData(this)
 
-        val callingIntent = intent
-        if (callingIntent.hasExtra("startingLat") && callingIntent.hasExtra("startingLng")) {
-            addMarker(googleMap, LatLng(callingIntent.getDoubleExtra("startingLat", 0.0), callingIntent.getDoubleExtra("startingLng", 0.0)), true)
+        if (intent.hasExtra("startingLat") && intent.hasExtra("startingLng")) {
+            addMarker(googleMap, LatLng(intent.getDoubleExtra("startingLat", 0.0), intent.getDoubleExtra("startingLng", 0.0)), true)
         }
 
         googleMap.setOnMapClickListener { latLng -> addMarker(googleMap, latLng, false) }

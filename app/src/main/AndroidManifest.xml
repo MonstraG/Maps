@@ -38,10 +38,10 @@
             android:name="com.company.maps.activities.ListActivity"
             android:parentActivityName="com.company.maps.activities.MapsActivity" />
         <activity
-            android:name="com.company.maps.activities.AddCityActivity"
+            android:name="com.company.maps.activities.city.AddCityActivity"
             android:parentActivityName="com.company.maps.activities.ListActivity" />
         <activity
             android:name="com.company.maps.activities.PickLocationOnMapActivity"
-            android:parentActivityName="com.company.maps.activities.AddCityActivity" />
+            android:parentActivityName="com.company.maps.activities.city.AddCityActivity" />
     </application>
 </manifest>

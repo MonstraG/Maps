@@ -8,7 +8,15 @@ class City internal constructor(private var name: String, private var latLng: La
                                 private var country: String) {
     private var dateTimeOfCreation: Date = Calendar.getInstance().time
 
+    fun getName(): String {
+        return name
+    }
+
     fun getLatLng(): LatLng {
         return latLng
+    }
+
+    fun getCountry(): String {
+        return country
     }
 }

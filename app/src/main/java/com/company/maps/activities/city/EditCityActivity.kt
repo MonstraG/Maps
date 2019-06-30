@@ -16,11 +16,15 @@ class EditCityActivity : AddCityActivity () {
 
         try {
             cityName = intent.getStringExtra("cityName") ?: throw IllegalArgumentException("City name cannot be null")
+            val city = MapData.getCity(cityName) ?: throw IllegalArgumentException("City cannot be null")
+            cityNameField!!.setText(city.getName())
+            cityLatField!!.setText(city.getLatLng().latitude.toString())
+            cityLngField!!.setText(city.getLatLng().longitude.toString())
+            countryField!!.setText(city.getCountry())
+            //TODO: FIELDS ARE EMPTY DESPITE BEING SET DAFAQ???
         } catch (e: Exception) {
             this.finish()
         }
-
-
 
         fabInit()
         deleteButtonInit()

@@ -81,7 +81,7 @@ class AddCityActivity : AppCompatActivity() {
                 val cityLat = cityLatField!!.text.toString().toDouble()
                 val cityLng = cityLngField!!.text.toString().toDouble()
                 val country = countryField!!.text.toString()
-                storeCity(cityName, cityLat, cityLng, country)
+                storeCity(cityName, cityLat , cityLng, country)
                 this.finish()
             } catch (e: Exception) {
                 setResult(-1)

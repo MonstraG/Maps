@@ -27,8 +27,7 @@ class EditCityActivity : AddCityActivity () {
     private fun fabInit() {
         findViewById<FloatingActionButton>(R.id.okFAB).setOnClickListener {
             MapData.removeCityFromStorage(cityName)
-            setCity()
-            this.finish()
+            addCityAndFinish()
         }
     }
 

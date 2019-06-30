@@ -63,8 +63,8 @@ open class AddCityActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, intent)
         if (requestCode == resultCode && intent != null) {
             setLatLntData(LatLng(
-                    intent.getDoubleExtra("lat", 0.0),
-                    intent.getDoubleExtra("lng", 0.0)
+                    intent.getDoubleExtra("pickedLat", 0.0),
+                    intent.getDoubleExtra("pickedLng", 0.0)
             ))
         }
     }

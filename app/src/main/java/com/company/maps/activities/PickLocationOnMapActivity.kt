@@ -41,7 +41,7 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
     private fun done() {
         setResult(0, Intent().putExtra("pickedLat", selectedLocation.latitude)
-                .putExtra("lng", selectedLocation.longitude))
+                .putExtra("pickedLat", selectedLocation.longitude))
         this.finish()
     }
 
@@ -49,13 +49,13 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
         MapData(this)
 
         if (intent.hasExtra("startingLat") && intent.hasExtra("startingLng")) {
-            addMarker(googleMap, LatLng(intent.getDoubleExtra("startingLat", 0.0), intent.getDoubleExtra("startingLng", 0.0)), true)
+            moveMarker(googleMap, LatLng(intent.getDoubleExtra("startingLat", 0.0), intent.getDoubleExtra("startingLng", 0.0)), true)
         }
 
-        googleMap.setOnMapClickListener { latLng -> addMarker(googleMap, latLng, false) }
+        googleMap.setOnMapClickListener { latLng -> moveMarker(googleMap, latLng, false) }
     }
 
-    private fun addMarker(map: GoogleMap, latLng: LatLng, zoom: Boolean) {
+    private fun moveMarker(map: GoogleMap, latLng: LatLng, zoom: Boolean) {
         marker?.remove()
         marker = map.addMarker(MarkerOptions().draggable(true).position(latLng))
         selectedLocation = latLng

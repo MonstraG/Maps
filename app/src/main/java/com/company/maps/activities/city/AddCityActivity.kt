@@ -21,10 +21,10 @@ import java.io.IOException
 
 open class AddCityActivity : AppCompatActivity() {
 
-    private var cityNameField: EditText? = null
-    private var cityLatField: EditText? = null
-    private var cityLngField: EditText? = null
-    private var countryField: EditText? = null
+    var cityNameField: EditText? = null
+    var cityLatField: EditText? = null
+    var cityLngField: EditText? = null
+    var countryField: EditText? = null
     private var coder: Geocoder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ open class AddCityActivity : AppCompatActivity() {
         coder = Geocoder(this)
 
         findViewById<Button>(R.id.onMapBtn).setOnClickListener { callOnMapPick() }
-        addCityBtnInit()
+        findViewById<Button>(R.id.addCityBtn).setOnClickListener { addCityAndFinish() }
         getLatLngFromApiBtnInit()
         getFromCurLocBtnInit()
     }
@@ -47,16 +47,6 @@ open class AddCityActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         cityNameField!!.requestFocus()
-    }
-
-    private fun callOnMapPick() {
-        val intent = Intent(this, PickLocationOnMapActivity::class.java)
-        try {
-            intent.putExtra("startingLat", cityLatField!!.text.toString().toDouble())
-            intent.putExtra("startingLng", cityLngField!!.text.toString().toDouble())
-        } catch (ignored: Exception) { }
-
-        startActivityForResult(intent, 0)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -69,10 +59,14 @@ open class AddCityActivity : AppCompatActivity() {
         }
     }
 
-    private fun addCityBtnInit() {
-        findViewById<Button>(R.id.addCityBtn).setOnClickListener {
-            addCityAndFinish()
-        }
+    private fun callOnMapPick() {
+        val intent = Intent(this, PickLocationOnMapActivity::class.java)
+        try {
+            intent.putExtra("startingLat", cityLatField!!.text.toString().toDouble())
+            intent.putExtra("startingLng", cityLngField!!.text.toString().toDouble())
+        } catch (ignored: Exception) { }
+
+        startActivityForResult(intent, 0)
     }
 
     fun addCityAndFinish() {

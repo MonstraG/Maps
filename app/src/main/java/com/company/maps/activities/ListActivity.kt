@@ -13,6 +13,7 @@ import com.company.maps.activities.city.EditCityActivity
 import com.company.maps.data.CityAdapter
 import com.company.maps.data.MapData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.security.AccessController.getContext
 
 class ListActivity : AppCompatActivity() {
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -22,7 +23,10 @@ class ListActivity : AppCompatActivity() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-            startActivity(Intent(applicationContext, ListActivity::class.java))
+            val cityId = viewHolder.adapterPosition
+            val cityNamesList = (mAdapter as CityAdapter).data
+            startActivity(Intent(this@ListActivity, EditCityActivity::class.java)
+                    .putExtra("cityName", cityNamesList!![cityId]))
         }
     }
 
@@ -49,5 +53,4 @@ class ListActivity : AppCompatActivity() {
             (mAdapter as CityAdapter).data!!.add(intent.getStringExtra("cityName"))
         }
     }
-
 }

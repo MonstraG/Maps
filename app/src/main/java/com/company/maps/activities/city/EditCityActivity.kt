@@ -20,6 +20,8 @@ class EditCityActivity : AddCityActivity () {
             this.finish()
         }
 
+
+
         fabInit()
         deleteButtonInit()
     }

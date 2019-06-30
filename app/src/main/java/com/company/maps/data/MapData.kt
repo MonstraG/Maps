@@ -52,7 +52,7 @@ class MapData(context: Context) {
 
     private fun loadAndDraw() {
         val map = mapData!!.getStringSet("cityNames", HashSet())
-        map?.forEach { name -> MapsActivity.drawCity(name, getPos(name)!!, false) }
+        map?.forEach { name -> MapsActivity.drawCity(name, getCity(name)!!.getLatLng(), false) }
     }
 
     companion object {
@@ -108,11 +108,11 @@ class MapData(context: Context) {
             Log.d("MapData", "Removed city $name")
         }
 
-        fun getPos(name: String): LatLng? {
-            return gson.fromJson(mapData!!.getString(name, ""), City::class.java).latLng
+        fun getCity(name: String): City? {
+            return gson.fromJson(mapData!!.getString(name, ""), City::class.java)
         }
 
-        fun loadCityList(): ArrayList<String> { //arrayList instead of MutableSet, because CityAdapter has sort.
+        fun loadCityList(): ArrayList<String> {
             return ArrayList(mapData!!.getStringSet("cityNames", HashSet()))
         }
     }

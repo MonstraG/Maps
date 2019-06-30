@@ -45,9 +45,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private fun pickRandomCameraPos(): LatLng? {
         val cities = MapData.loadCityList()
         return if (cities.size > 0) {
-            val randomGenerator = Random()
-            val cityName = cities[randomGenerator.nextInt(cities.size)]
-            MapData.getPos(cityName)
+            val cityName = cities[Random().nextInt(cities.size)]
+            MapData.getCity(cityName)!!.getLatLng()
         } else
             LatLng(0.0, 0.0)
     }

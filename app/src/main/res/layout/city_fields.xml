@@ -25,7 +25,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="#0D000000"
         app:layout_constraintTop_toBottomOf="@+id/cityNameField">
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:ems="10"
+            android:ems="8"
             android:hint="@string/cityLngFieldLoc"
             android:inputType="numberSigned|numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,7 +51,6 @@
             android:layout_marginEnd="8dp"
             android:text="@string/onMapBtnLoc"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toEndOf="@+id/cityLatField"
             app:layout_constraintTop_toBottomOf="@+id/getLatLngFromApiBtn" />
 
@@ -61,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
-            android:ems="10"
+            android:ems="8"
             android:hint="@string/cityLatFieldLoc"
             android:inputType="numberSigned|numberDecimal"
             app:layout_constraintStart_toStartOf="parent"
@@ -92,8 +91,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cityLngField"
-            app:layout_constraintTop_toBottomOf="@+id/onMapBtn"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/onMapBtn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
@@ -101,7 +99,7 @@
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="@string/countryNameFieldLoc"

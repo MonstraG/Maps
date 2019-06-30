@@ -1,4 +1,4 @@
-package com.company.maps.activities
+package com.company.maps.activities.city
 
 import android.Manifest
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.company.maps.R
+import com.company.maps.activities.PickLocationOnMapActivity
 
 import com.company.maps.data.MapData
 import com.google.android.gms.location.LocationServices
@@ -18,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng
 
 import java.io.IOException
 
-class AddCityActivity : AppCompatActivity() {
+open class AddCityActivity : AppCompatActivity() {
 
     private var cityNameField: EditText? = null
     private var cityLatField: EditText? = null
@@ -37,7 +38,7 @@ class AddCityActivity : AppCompatActivity() {
 
         coder = Geocoder(this)
 
-        onMapBtnInit()
+        findViewById<Button>(R.id.onMapBtn).setOnClickListener { callOnMapPick() }
         addCityBtnInit()
         getLatLngFromApiBtnInit()
         getFromCurLocBtnInit()
@@ -46,11 +47,6 @@ class AddCityActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         cityNameField!!.requestFocus()
-    }
-
-    private fun onMapBtnInit() {
-        val onMapBtn = findViewById<Button>(R.id.onMapBtn)
-        onMapBtn.setOnClickListener { callOnMapPick() }
     }
 
     private fun callOnMapPick() {
@@ -74,8 +70,7 @@ class AddCityActivity : AppCompatActivity() {
     }
 
     private fun addCityBtnInit() {
-        val addCityBtn = findViewById<Button>(R.id.addCityBtn)
-        addCityBtn.setOnClickListener {
+        findViewById<Button>(R.id.addCityBtn).setOnClickListener {
             try {
                 val cityName = cityNameField!!.text.toString().trim { it <= ' ' }
                 val cityLat = cityLatField!!.text.toString().toDouble()
@@ -96,8 +91,7 @@ class AddCityActivity : AppCompatActivity() {
     }
 
     private fun getLatLngFromApiBtnInit() {
-        val getLatLngFromApiBtn = findViewById<Button>(R.id.getLatLngFromApiBtn)
-        getLatLngFromApiBtn.setOnClickListener {
+        findViewById<Button>(R.id.getLatLngFromApiBtn).setOnClickListener {
             val pos = getLocationFromAddress(cityNameField!!.text.toString().trim { it <= ' ' })
             if (pos != null) {
                 setLatLntData(pos)
@@ -122,8 +116,7 @@ class AddCityActivity : AppCompatActivity() {
     }
 
     private fun getFromCurLocBtnInit() {
-        val fromCurLocBtn = findViewById<Button>(R.id.fromCurLocBtn)
-        fromCurLocBtn.setOnClickListener {
+        findViewById<Button>(R.id.fromCurLocBtn).setOnClickListener {
             val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0)

@@ -30,8 +30,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment?
         Objects.requireNonNull<SupportMapFragment>(mapFragment).getMapAsync(this)
 
-        val fab = findViewById<FloatingActionButton>(R.id.openCityListFAB)
-        fab.setOnClickListener { startActivity(Intent(this, ListActivity::class.java)) }
+        findViewById<FloatingActionButton>(R.id.openCityListFAB).setOnClickListener {
+            startActivity(Intent(this, ListActivity::class.java))
+        }
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -52,7 +53,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     companion object {
-
         private var mMap: GoogleMap? = null
 
         fun drawCity(name: String, pos: LatLng, moveCamera: Boolean) {

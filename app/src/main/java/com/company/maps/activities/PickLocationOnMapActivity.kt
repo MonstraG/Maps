@@ -31,12 +31,7 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
                 .findFragmentById(R.id.map) as SupportMapFragment?
         Objects.requireNonNull<SupportMapFragment>(mapFragment).getMapAsync(this)
 
-        fabInit()
-    }
-
-    private fun fabInit() {
-        val fab = findViewById<FloatingActionButton>(R.id.okFAB)
-        fab.setOnClickListener { done() }
+        findViewById<FloatingActionButton>(R.id.okFAB).setOnClickListener { done() }
     }
 
     override fun onBackPressed() {

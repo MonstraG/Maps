@@ -8,10 +8,11 @@
     <string name="getLatLngFromApiBtnLoc">Get from API</string>
     <string name="onMapBtnLoc">Pick on map</string>
     <string name="title_activity_maps">My places</string>
-    <string name="fromCurLocBtn">My location</string>
-    <string name="countryNameField">Country</string>
+    <string name="fromCurLocBtnLoc">My location</string>
+    <string name="countryNameFieldLoc">Country</string>
     <string name="toastApiError">Error getting data from API, check city name.</string>
     <string name="toastCannotCreate">Could not create a record, check form fields.</string>
     <string name="toastGeoNoPermission">Could not get location, permission required.</string>
     <string name="toastNoNetworkOrNotFound">No internet access or city was not found.</string>
+    <string name="deleteCityButton">Delete City</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.company.maps.R
 import com.company.maps.activities.city.AddCityActivity
+import com.company.maps.activities.city.EditCityActivity
 import com.company.maps.data.CityAdapter
 import com.company.maps.data.MapData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -21,11 +22,7 @@ class ListActivity : AppCompatActivity() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-            val cityId = viewHolder.adapterPosition
-            val cityNamesList = (mAdapter as CityAdapter).data
-            MapData.removeCityFromStorage(cityNamesList!![cityId]) //sharedPrefs
-            cityNamesList.removeAt(cityId)
-            (mAdapter as CityAdapter).data = cityNamesList //list
+            startActivity(Intent(applicationContext, ListActivity::class.java))
         }
     }
 

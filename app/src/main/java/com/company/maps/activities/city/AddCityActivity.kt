@@ -21,11 +21,12 @@ import java.io.IOException
 
 open class AddCityActivity : AppCompatActivity() {
 
-    private var cityNameField: EditText? = null
-    private var cityLatField: EditText? = null
-    private var cityLngField: EditText? = null
-    private var countryField: EditText? = null
+    var cityNameField: EditText? = null
+    var cityLatField: EditText? = null
+    var cityLngField: EditText? = null
+    var countryField: EditText? = null
     private var coder: Geocoder? = null
+    var addCityButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,11 +73,7 @@ open class AddCityActivity : AppCompatActivity() {
     private fun addCityBtnInit() {
         findViewById<Button>(R.id.addCityBtn).setOnClickListener {
             try {
-                val cityName = cityNameField!!.text.toString().trim { it <= ' ' }
-                val cityLat = cityLatField!!.text.toString().toDouble()
-                val cityLng = cityLngField!!.text.toString().toDouble()
-                val country = countryField!!.text.toString()
-                storeCity(cityName, cityLat , cityLng, country)
+                setCity()
                 this.finish()
             } catch (e: Exception) {
                 setResult(-1)
@@ -85,13 +82,22 @@ open class AddCityActivity : AppCompatActivity() {
         }
     }
 
+    fun setCity() {
+        val cityName = cityNameField!!.text.toString().trim { it <= ' ' }
+        val cityLat = cityLatField!!.text.toString().toDouble()
+        val cityLng = cityLngField!!.text.toString().toDouble()
+        val country = countryField!!.text.toString()
+        storeCity(cityName, cityLat , cityLng, country)
+    }
+
     private fun storeCity(name: String, lat: Double, lng: Double, country: String) {
         MapData.addCityToStorage(name, lat, lng, country) //sharedPrefs
         setResult(0, Intent().putExtra("cityName", name)) //list
     }
 
     private fun getLatLngFromApiBtnInit() {
-        findViewById<Button>(R.id.getLatLngFromApiBtn).setOnClickListener {
+        addCityButton = findViewById<Button>(R.id.getLatLngFromApiBtn)
+        addCityButton!!.setOnClickListener {
             val pos = getLocationFromAddress(cityNameField!!.text.toString().trim { it <= ' ' })
             if (pos != null) {
                 setLatLntData(pos)

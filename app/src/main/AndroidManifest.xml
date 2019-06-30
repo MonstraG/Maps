@@ -41,6 +41,9 @@
             android:name="com.company.maps.activities.city.AddCityActivity"
             android:parentActivityName="com.company.maps.activities.ListActivity" />
         <activity
+            android:name="com.company.maps.activities.city.EditCityActivity"
+            android:parentActivityName="com.company.maps.activities.ListActivity" />
+        <activity
             android:name="com.company.maps.activities.PickLocationOnMapActivity"
             android:parentActivityName="com.company.maps.activities.city.AddCityActivity" />
     </application>

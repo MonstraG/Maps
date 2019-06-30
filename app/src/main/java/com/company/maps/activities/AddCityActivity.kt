@@ -10,8 +10,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-
 import com.company.maps.R
+
 import com.company.maps.data.MapData
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng

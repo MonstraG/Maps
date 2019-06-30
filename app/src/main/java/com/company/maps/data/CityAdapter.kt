@@ -7,12 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.company.maps.R
 
-class CityAdapter(private var cityNames: MutableList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
+class CityAdapter(private var cityNames: ArrayList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
-    var data: MutableList<String>?
+    var data: ArrayList<String>?
         get() = cityNames
         set(newList) {
-            cityNames = newList!!.sorted().toMutableList()
+            cityNames = ArrayList(newList!!.sorted().toList())
             notifyDataSetChanged()
         }
 

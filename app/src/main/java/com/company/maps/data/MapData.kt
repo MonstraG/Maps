@@ -4,15 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.preference.PreferenceManager.getDefaultSharedPreferences
-
 import android.util.Log
-
 import com.company.maps.activities.MapsActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
-
-import java.util.HashSet
-
+import java.util.*
 
 class MapData(context: Context) {
 
@@ -25,7 +21,7 @@ class MapData(context: Context) {
         if (isDebug)
             debugPrintAllData()
 
-        transferStorageToJson()
+        transferStorageToJson() //todo: remove when done.
 
         if (isDebug)
             debugPrintAllData()
@@ -61,7 +57,7 @@ class MapData(context: Context) {
 
         private fun getPosOldWay(name: String): LatLng {
             return LatLng(mapData!!.getFloat(name + "lat", 0f).toDouble(),
-                          mapData!!.getFloat(name + "lng", 0f).toDouble())
+                    mapData!!.getFloat(name + "lng", 0f).toDouble())
         }
 
         private fun removeCityFromStorageOld(name: String) {
@@ -76,7 +72,8 @@ class MapData(context: Context) {
                         .apply()
 
                 Log.d("MapData-Old", "Removed city$name")
-            } catch (ignored: Exception) { }
+            } catch (ignored: Exception) {
+            }
         }
 
         fun addCityToStorage(name: String, lat: Double, lng: Double, country: String) {

@@ -64,12 +64,13 @@ open class AddCityActivity : AppCompatActivity() {
         try {
             intent.putExtra("startingLat", getDouble(cityLatField))
             intent.putExtra("startingLng", getDouble(cityLngField))
-        } catch (ignored: Exception) { }
+        } catch (ignored: Exception) {
+        }
 
         startActivityForResult(intent, 0)
     }
 
-    fun addCityAndFinish() {
+    private fun addCityAndFinish() {
         try {
             val cityName = getString(cityNameField)
             val cityLat = getDouble(cityLatField)
@@ -102,7 +103,8 @@ open class AddCityActivity : AppCompatActivity() {
                 val location = address[0]
                 return LatLng(location.latitude, location.longitude)
             }
-        } catch (ignored: IOException) { }
+        } catch (ignored: IOException) {
+        }
 
         Toast.makeText(this, R.string.toastNoNetworkOrNotFound, Toast.LENGTH_SHORT).show()
         return null
@@ -127,7 +129,7 @@ open class AddCityActivity : AppCompatActivity() {
                 mFusedLocationClient.lastLocation.addOnSuccessListener { result -> setLatLntData(LatLng(result.latitude, result.longitude)) }
             }
         } else {
-            Toast.makeText(this,  R.string.toastGeoNoPermission, Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, R.string.toastGeoNoPermission, Toast.LENGTH_SHORT).show()
         }
     }
 

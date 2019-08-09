@@ -23,8 +23,8 @@ class ListActivity : AppCompatActivity() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
             val cityId = viewHolder.adapterPosition
             val cityNamesList = (mAdapter as CityAdapter).data
-            startActivity(Intent(this@ListActivity, EditCityActivity::class.java)
-                    .putExtra("cityName", cityNamesList!![cityId]))
+            startActivityForResult(Intent(this@ListActivity,
+                    EditCityActivity::class.java).putExtra("cityName", cityNamesList!![cityId]), 0)
         }
     }
 

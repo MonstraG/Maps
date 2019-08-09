@@ -1,8 +1,7 @@
 package com.company.maps.data
 
 import com.google.android.gms.maps.model.LatLng
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 
 class City internal constructor(private var name: String, private var latLng: LatLng,
                                 private var country: String) {

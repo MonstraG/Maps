@@ -2,9 +2,7 @@ package com.company.maps.activities
 
 import android.content.Intent
 import android.os.Bundle
-
 import androidx.fragment.app.FragmentActivity
-
 import com.company.maps.R
 import com.company.maps.data.MapData
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -15,8 +13,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
-import java.util.Objects
+import java.util.*
 
 class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 

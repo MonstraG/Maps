@@ -38,7 +38,7 @@ open class AddCityActivity : AppCompatActivity() {
 
         coder = Geocoder(this)
 
-        findViewById<Button>(R.id.onMapBtn).setOnClickListener { callOnMapPick() }
+        findViewById<Button>(R.id.onMapBtn).setOnClickListener { onMapPick() }
         findViewById<Button>(R.id.addCityBtn).setOnClickListener { addCityAndFinish() }
         getLatLngFromApiBtnInit()
         getFromCurLocBtnInit()
@@ -59,11 +59,11 @@ open class AddCityActivity : AppCompatActivity() {
         }
     }
 
-    private fun callOnMapPick() {
+    private fun onMapPick() {
         val intent = Intent(this, PickLocationOnMapActivity::class.java)
         try {
-            intent.putExtra("startingLat", cityLatField!!.text.toString().toDouble())
-            intent.putExtra("startingLng", cityLngField!!.text.toString().toDouble())
+            intent.putExtra("startingLat", getDouble(cityLatField))
+            intent.putExtra("startingLng", getDouble(cityLngField))
         } catch (ignored: Exception) { }
 
         startActivityForResult(intent, 0)
@@ -71,11 +71,13 @@ open class AddCityActivity : AppCompatActivity() {
 
     fun addCityAndFinish() {
         try {
-            val cityName = cityNameField!!.text.toString().trim { it <= ' ' }
-            val cityLat = cityLatField!!.text.toString().toDouble()
-            val cityLng = cityLngField!!.text.toString().toDouble()
-            val country = countryField!!.text.toString()
-            storeCity(cityName, cityLat , cityLng, country)
+            val cityName = getString(cityNameField)
+            val cityLat = getDouble(cityLatField)
+            val cityLng = getDouble(cityLngField)
+            val country = getString(countryField)
+            LatLng(cityLat, cityLng) //validation
+            MapData.addCityToStorage(cityName, cityLat, cityLng, country) //sharedPrefs
+            setResult(0, Intent().putExtra("cityName", cityName)) //list
             this.finish()
         } catch (e: Exception) {
             setResult(-1)
@@ -83,19 +85,12 @@ open class AddCityActivity : AppCompatActivity() {
         }
     }
 
-    private fun storeCity(name: String, lat: Double, lng: Double, country: String) {
-        MapData.addCityToStorage(name, lat, lng, country) //sharedPrefs
-        setResult(0, Intent().putExtra("cityName", name)) //list
-    }
-
     private fun getLatLngFromApiBtnInit() {
         findViewById<Button>(R.id.getLatLngFromApiBtn).setOnClickListener {
-            val pos = getLocationFromAddress(cityNameField!!.text.toString().trim { it <= ' ' })
+            val pos = getLocationFromAddress(getString(cityNameField))
             if (pos != null) {
                 setLatLntData(pos)
-                callOnMapPick()
-            } else {
-                Toast.makeText(this, R.string.toastApiError, Toast.LENGTH_SHORT).show()
+                onMapPick()
             }
         }
     }
@@ -139,5 +134,15 @@ open class AddCityActivity : AppCompatActivity() {
     private fun setLatLntData(pos: LatLng) {
         cityLatField!!.setText(String.format("%.4f", pos.latitude))
         cityLngField!!.setText(String.format("%.4f", pos.longitude))
+    }
+
+    companion object Utils {
+        fun getDouble(field: EditText?): Double {
+            return field!!.text.toString().toDouble()
+        }
+
+        fun getString(field: EditText?): String {
+            return field!!.text.toString().trim { it <= ' ' }
+        }
     }
 }

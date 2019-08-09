@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.company.maps.R
 
-class CityAdapter(private var cityNames: ArrayList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
+class CityAdapter(private var cityNames: MutableList<String>?) : RecyclerView.Adapter<CityAdapter.CityViewHolder>() {
 
-    var data: ArrayList<String>?
+    var data: MutableList<String>?
         get() = cityNames
         set(newList) {
             cityNames = ArrayList(newList!!.sorted().toList())
@@ -40,7 +40,6 @@ class CityAdapter(private var cityNames: ArrayList<String>?) : RecyclerView.Adap
         return cityNames!!.size
     }
 
-    class CityViewHolder(// each data item is just a string in this case
-            val textView: TextView) : RecyclerView.ViewHolder(textView)
-
+    // each data item is just a string in this case
+    class CityViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)
 }

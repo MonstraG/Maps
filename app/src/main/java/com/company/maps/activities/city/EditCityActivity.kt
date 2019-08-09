@@ -8,11 +8,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.lang.Exception
 
 class EditCityActivity : AddCityActivity () {
-    var cityName: String = ""
+    private var cityName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.edit_city)
+
+        fabInit()
+        deleteButtonInit()
 
         try {
             cityName = intent.getStringExtra("cityName") ?: throw IllegalArgumentException("City name cannot be null")
@@ -25,9 +28,6 @@ class EditCityActivity : AddCityActivity () {
         } catch (e: Exception) {
             this.finish()
         }
-
-        fabInit()
-        deleteButtonInit()
     }
 
     private fun fabInit() {

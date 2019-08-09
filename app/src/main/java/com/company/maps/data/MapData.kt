@@ -3,16 +3,16 @@ package com.company.maps.data
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
+import android.preference.PreferenceManager.getDefaultSharedPreferences
+
 import android.util.Log
 
 import com.company.maps.activities.MapsActivity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 
-import java.util.ArrayList
 import java.util.HashSet
 
-import android.preference.PreferenceManager.getDefaultSharedPreferences
 
 class MapData(context: Context) {
 
@@ -112,8 +112,8 @@ class MapData(context: Context) {
             return gson.fromJson(mapData!!.getString(name, ""), City::class.java)
         }
 
-        fun loadCityList(): ArrayList<String> {
-            return ArrayList(mapData!!.getStringSet("cityNames", HashSet()))
+        fun loadCityList(): MutableList<String> {
+            return mapData!!.getStringSet("cityNames", HashSet())!!.toMutableList()
         }
     }
 }

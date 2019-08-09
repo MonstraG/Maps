@@ -6,14 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.company.maps.R
 import com.company.maps.activities.city.AddCityActivity
 import com.company.maps.activities.city.EditCityActivity
 import com.company.maps.data.CityAdapter
 import com.company.maps.data.MapData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.security.AccessController.getContext
 
 class ListActivity : AppCompatActivity() {
     private var mAdapter: RecyclerView.Adapter<*>? = null
@@ -42,7 +40,8 @@ class ListActivity : AppCompatActivity() {
 
         //FAB
         findViewById<FloatingActionButton>(R.id.addCityFAB).setOnClickListener {
-            startActivityForResult(Intent(this, AddCityActivity::class.java), 0) }
+            startActivityForResult(Intent(this, AddCityActivity::class.java), 0)
+        }
 
         ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(recyclerView)
     }
@@ -50,7 +49,11 @@ class ListActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (requestCode == resultCode && intent != null) {
-            (mAdapter as CityAdapter).data!!.add(intent.getStringExtra("cityName"))
+            val cityName = intent.getStringExtra("cityName")
+            if (cityName != null) {
+                (mAdapter as CityAdapter).data!!.add(cityName)
+                mAdapter!!.notifyDataSetChanged()
+            }
         }
     }
 }

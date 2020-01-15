@@ -37,7 +37,8 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private fun done() {
-        setResult(0, Intent().putExtra("pickedLat", selectedLocation.latitude)
+        setResult(0, Intent()
+                .putExtra("pickedLat", selectedLocation.latitude)
                 .putExtra("pickedLng", selectedLocation.longitude))
         this.finish()
     }
@@ -60,7 +61,8 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
         if (zoom) {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0F))
-        } else
+        } else {
             map.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        }
     }
 }

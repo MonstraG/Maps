@@ -59,10 +59,10 @@ class ListActivity : AppCompatActivity() {
                 mAdapter!!.notifyDataSetChanged()
             } else {
                 if (newCityName == null) {
-                    Log.w("ListActivity::onActivityResult", "Recieved correct result code, but NEW_CITY_NAME is null!")
+                    Log.w("ListActivity::onActivityResult", "Received correct result code, but NEW_CITY_NAME is null!")
                 }
                 if (oldCityName == null) {
-                    Log.w("ListActivity::onActivityResult", "Recieved correct result code, but OLD_CITY_NAME is null!")
+                    Log.w("ListActivity::onActivityResult", "Received correct result code, but OLD_CITY_NAME is null!")
                 }
             }
         }

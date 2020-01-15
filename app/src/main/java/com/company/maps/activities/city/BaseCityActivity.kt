@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -63,7 +64,8 @@ open class BaseCityActivity : AppCompatActivity() {
         try {
             intent.putExtra("startingLat", getDouble(cityLatField))
             intent.putExtra("startingLng", getDouble(cityLngField))
-        } catch (ignored: Exception) {
+        } catch (e: Exception) {
+            Log.e("BaseCityActivity::onMapPick", "Exception when trying to do onMapPick, err: ${e.message}, stacktrace: ${e.stackTrace}")
         }
 
         startActivityForResult(intent, 0)
@@ -86,7 +88,8 @@ open class BaseCityActivity : AppCompatActivity() {
                 val location = address[0]
                 return LatLng(location.latitude, location.longitude)
             }
-        } catch (ignored: IOException) {
+        } catch (e: IOException) {
+            Log.e("BaseCityActivity::getLocationFromAddress", "Exception when trying to getLocationFromAddress, err: ${e.message}, stacktrace: ${e.stackTrace}")
         }
 
         Toast.makeText(this, R.string.toastNoNetworkOrNotFound, Toast.LENGTH_SHORT).show()

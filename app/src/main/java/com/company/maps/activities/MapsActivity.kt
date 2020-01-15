@@ -42,8 +42,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         return if (cities.size > 0) {
             val cityName = cities[Random().nextInt(cities.size)]
             MapData.getCity(cityName)!!.getLatLng()
-        } else
+        } else {
             LatLng(0.0, 0.0)
+        }
     }
 
     companion object {
@@ -52,8 +53,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         fun drawCity(name: String, pos: LatLng, moveCamera: Boolean) {
             Log.d("drawCity", "Loaded city: " + name + " " + pos.latitude + " " + pos.longitude)
             mMap!!.addMarker(MarkerOptions().position(pos).title(name))
-            if (moveCamera)
+            if (moveCamera) {
                 mMap!!.moveCamera(CameraUpdateFactory.newLatLng(pos))
+            }
         }
     }
 

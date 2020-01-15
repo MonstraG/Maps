@@ -2,6 +2,7 @@ package com.company.maps.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,8 +24,8 @@ class ListActivity : AppCompatActivity() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
             val cityId = viewHolder.adapterPosition
             val cityNamesList = (mAdapter as CityAdapter).data
-            startActivityForResult(Intent(this@ListActivity,
-                    EditCityActivity::class.java).putExtra("cityName", cityNamesList!![cityId]), 0)
+            val intent = Intent(this@ListActivity, EditCityActivity::class.java)
+            startActivityForResult(intent.putExtra(CITY_NAME, cityNamesList!![cityId]), 0)
         }
     }
 
@@ -34,7 +35,7 @@ class ListActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.cityListView)
         recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager =  LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(this)
         mAdapter = CityAdapter(MapData.loadCityList())
         recyclerView.adapter = mAdapter
 
@@ -49,11 +50,27 @@ class ListActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         if (requestCode == resultCode && intent != null) {
-            val cityName = intent.getStringExtra("cityName")
-            if (cityName != null) {
-                (mAdapter as CityAdapter).data!!.add(cityName)
+            val newCityName = intent.getStringExtra(NEW_CITY_NAME)
+            val oldCityName = intent.getStringExtra(OLD_CITY_NAME)
+            if (newCityName != null && oldCityName != null) {
+                val list = (mAdapter as CityAdapter).data!!
+                list.remove(oldCityName)
+                list.add(newCityName)
                 mAdapter!!.notifyDataSetChanged()
+            } else {
+                if (newCityName == null) {
+                    Log.w("ListActivity::onActivityResult", "Recieved correct result code, but NEW_CITY_NAME is null!")
+                }
+                if (oldCityName == null) {
+                    Log.w("ListActivity::onActivityResult", "Recieved correct result code, but OLD_CITY_NAME is null!")
+                }
             }
         }
+    }
+
+    companion object EditExtraStrings {
+        const val CITY_NAME = "cityName"
+        const val OLD_CITY_NAME = "oldCityName"
+        const val NEW_CITY_NAME = "newCityName"
     }
 }

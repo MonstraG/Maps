@@ -7,23 +7,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.company.maps.R
 import com.company.maps.data.county.Country
 
-class ItemAdapter(val countries: MutableList<Country>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ItemAdapter(countries: MutableList<Country>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items = ArrayList<Item>()
 
     init {
         items.clear()
         countries.map { country ->
             items.add(Item(country.getName(), COUNTRY, country))
-            items.addAll( country.getCityList().sorted().map { city -> Item(city.getName(), CITY, null) } )
+            items.addAll(country.getCityList().sorted().map { city -> Item(city.getName(), CITY, null) })
         }
     }
 
     fun get(position: Int): Item {
         return items[position]
-    }
-
-    fun removeCity(itemName: String) {
-        items.removeIf {it.name == itemName && it.viewType == CITY}
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -56,7 +52,8 @@ class ItemAdapter(val countries: MutableList<Country>) : RecyclerView.Adapter<Re
         val itemName = items[position].name
 
         if (viewType == COUNTRY && itemName == "") {
-            holder.itemView.findViewById<TextView>(viewType).text = holder.itemView.context.getText(R.string.noCountry)
+            holder.itemView.findViewById<TextView>(R.id.text).text = holder.itemView.context.getText(R.string.noCountry)
+            return
         }
 
         holder.itemView.findViewById<TextView>(R.id.text).text = itemName

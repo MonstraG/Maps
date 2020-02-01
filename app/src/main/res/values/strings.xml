@@ -10,7 +10,7 @@
     <string name="onMapBtnLoc">На карте</string>
     <string name="fromCurLocBtnLoc">По геолокации</string>
     <string name="countryNameFieldLoc">Страна</string>
-    <string name="toastCannotCreate">Ошибка создания записи, проверьте данные.</string>
+    <string name="toastCannotCreateCity">Ошибка создания записи, проверьте данные.</string>
     <string name="toastNoNetworkOrNotFound">Нет интернет-соединения или такой город не найден.</string>
     <string name="toastGeoNoPermission">Неудалось получить локацию - разрешение не выдано.</string>
     <string name="deleteCityButton">Удалить город</string>

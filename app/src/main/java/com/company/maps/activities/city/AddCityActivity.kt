@@ -19,11 +19,17 @@ open class AddCityActivity : BaseCityActivity() {
 
     private fun addCityAndFinish() {
         val city = buildCityFromFields()
+        if (city.getName() == "") {
+            Toast.makeText(this, R.string.toastCannotCreateCity, Toast.LENGTH_LONG).show()
+            return
+        }
+
         val mapData = MapData(this)
         if (mapData.findCountryContainingCityName(city.getName()) != null) {
             Toast.makeText(this, R.string.toastCityAlreadyExists, Toast.LENGTH_LONG).show()
             return
         }
+
         MapData(this).addCity(city).save()
         setResult(0, Intent().putExtra(CITY_NAME, city.getName()))
         this.finish()

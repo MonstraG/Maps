@@ -21,13 +21,11 @@ import com.google.android.gms.maps.model.LatLng
 import java.io.IOException
 
 open class BaseCityActivity : AppCompatActivity() {
-
     var cityNameField: EditText? = null
     var cityLatField: EditText? = null
     var cityLngField: EditText? = null
     var countryField: EditText? = null
     private var coder: Geocoder? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

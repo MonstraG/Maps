@@ -1,7 +1,5 @@
 package com.company.maps.data.item
 
-import java.lang.Exception
-
 const val COUNTRY = 0
 const val CITY = 1
 

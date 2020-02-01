@@ -2,21 +2,13 @@ package com.company.maps.data.county
 
 import com.company.maps.data.city.City
 
-class Country internal constructor(private var name: String, private var cities: MutableList<City>): Comparable<Country> {
+class Country internal constructor(private var name: String, private var cities: MutableList<City>) : Comparable<Country> {
     fun getName(): String {
         return name
     }
 
-    fun setName(name: String) {
-        this.name = name
-    }
-
     fun getCityList(): MutableList<City> {
         return cities
-    }
-
-    fun setCityList(cities: MutableList<City>) {
-        this.cities = cities
     }
 
     fun getCityNameList(): List<String> {

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import com.company.maps.R
 import com.company.maps.activities.ListActivity.EditExtraStrings.NEW_CITY_NAME
 import com.company.maps.activities.ListActivity.EditExtraStrings.OLD_CITY_NAME
@@ -27,7 +28,8 @@ class EditCityActivity : BaseCityActivity() {
     }
 
     private fun loadCityData() {
-        initialCityName = intent.getStringExtra("cityName") ?: throw IllegalArgumentException("City name cannot be null")
+        initialCityName = intent.getStringExtra("cityName")
+                ?: throw IllegalArgumentException("City name cannot be null")
         val city = mapData!!.getCityList().find { it.getName() == initialCityName }
 
         if (city == null) {
@@ -44,10 +46,16 @@ class EditCityActivity : BaseCityActivity() {
     // removes city, adds new city and finishes the activity
     private fun finishEditingFabInit() {
         findViewById<FloatingActionButton>(R.id.okFAB).setOnClickListener {
-            mapData!!.removeCity(initialCityName)
-            addCity(mapData!!)
-            mapData!!.save()
-            this.finish()
+            val newCity = buildCityFromFields()
+            if (newCity.getName() == "") {
+                Toast.makeText(this, R.string.toastCannotCreateCity, Toast.LENGTH_LONG).show()
+            } else {
+                mapData!!.removeCity(initialCityName)
+                mapData!!.addCity(newCity)
+                setResult(0, Intent().putExtra(NEW_CITY_NAME, newCity.getName()).putExtra(OLD_CITY_NAME, initialCityName)) //list
+                mapData!!.save()
+                this.finish()
+            }
         }
     }
 
@@ -57,11 +65,5 @@ class EditCityActivity : BaseCityActivity() {
             mapData!!.save()
             this.finish()
         }
-    }
-
-    private fun addCity(mapData: MapData) {
-        val newCity = buildCityFromFields()
-        mapData.addCity(newCity)
-        setResult(0, Intent().putExtra(NEW_CITY_NAME, newCity.getName()).putExtra(OLD_CITY_NAME, initialCityName)) //list
     }
 }

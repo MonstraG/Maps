@@ -18,7 +18,7 @@ class MapData(context: Context) {
     }
 
     fun addCity(city: City): MapData {
-        val country = countries.find {country -> country.getName() == city.getCountry() }
+        val country = countries.find { country -> country.getName() == city.getCountry() }
         if (country != null) {
             country.addCity(city)
         } else {
@@ -59,7 +59,7 @@ class MapData(context: Context) {
         countries.forEach { country -> country.getCityList().forEach { city -> drawCity(city) } }
     }
 
-    fun drawCity(city: City) {
+    private fun drawCity(city: City) {
         MapsActivity.drawCity(city.getName(), city.getLatLng(), false)
     }
 

@@ -32,16 +32,17 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        MapData(this)
+        mapData = MapData(this)
+        mapData!!.drawAllCities()
 
         mMap!!.moveCamera(CameraUpdateFactory.newLatLng(pickRandomCameraPos()))
     }
 
     private fun pickRandomCameraPos(): LatLng? {
-        val cities = MapData.loadCityList()
-        return if (cities.size > 0) {
-            val cityName = cities[Random().nextInt(cities.size)]
-            MapData.getCity(cityName)!!.getLatLng()
+        val cities = mapData!!.getCityList()
+        return if (cities.isNotEmpty()) {
+            val city = cities[Random().nextInt(cities.size)]
+            city.getLatLng()
         } else {
             LatLng(0.0, 0.0)
         }
@@ -49,6 +50,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
     companion object {
         private var mMap: GoogleMap? = null
+        private var mapData: MapData? = null
 
         fun drawCity(name: String, pos: LatLng, moveCamera: Boolean) {
             Log.d("drawCity", "Loaded city: " + name + " " + pos.latitude + " " + pos.longitude)

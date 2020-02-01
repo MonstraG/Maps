@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.company.maps.R
-import com.company.maps.data.MapData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -16,7 +15,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
 class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
-
     private var selectedLocation: LatLng = LatLng(0.0, 0.0)
     private var marker: Marker? = null
 
@@ -44,11 +42,11 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        MapData(this)
-
         if (intent.hasExtra("startingLat") && intent.hasExtra("startingLng")) {
-            moveMarker(googleMap, LatLng(intent.getDoubleExtra("startingLat", 0.0),
-                    intent.getDoubleExtra("startingLng", 0.0)), true)
+            moveMarker(googleMap, LatLng(
+                    intent.getDoubleExtra("startingLat", 0.0),
+                    intent.getDoubleExtra("startingLng", 0.0)
+            ), true)
         }
 
         googleMap.setOnMapClickListener { latLng -> moveMarker(googleMap, latLng, false) }

@@ -2,115 +2,79 @@ package com.company.maps.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.ApplicationInfo
-import android.preference.PreferenceManager.getDefaultSharedPreferences
-import android.util.Log
+import android.preference.PreferenceManager
 import com.company.maps.activities.MapsActivity
-import com.google.android.gms.maps.model.LatLng
+import com.company.maps.data.city.City
+import com.company.maps.data.county.Country
 import com.google.gson.Gson
-import java.util.*
+import com.google.gson.reflect.TypeToken
 
 class MapData(context: Context) {
+    var countries: MutableList<Country>
+    private val serializer = Serializer(context)
 
     init {
-        val appFlags = context.applicationInfo.flags
-        val isDebug = appFlags and ApplicationInfo.FLAG_DEBUGGABLE != 0
-
-        mapData = getDefaultSharedPreferences(context)
-
-        if (isDebug)
-            debugPrintAllData()
-
-        transferStorageToJson() //todo: remove when done.
-
-        if (isDebug)
-            debugPrintAllData()
-
-        loadAndDraw()
+        this.countries = serializer.load().toMutableList()
     }
 
-    private fun transferStorageToJson() {
-        loadCityList().forEach { city ->
-            if (mapData!!.contains(city + "lat") || mapData!!.contains(city + "lng")) {
-                val pos = getPosOldWay(city)
-                removeCityFromStorageOld(city)
-                addCityToStorage(city, pos, "")
+    fun addCity(city: City): MapData {
+        val country = countries.find {country -> country.getName() == city.getCountry() }
+        if (country != null) {
+            country.addCity(city)
+        } else {
+            countries.add(Country(city.getCountry(), mutableListOf(city)))
+        }
+        return this
+    }
+
+    fun removeCity(cityName: String): MapData {
+        val country = findCountryContainingCityName(cityName)
+        if (country == null) {
+            throw Exception("Cannot remove city that doesn't exist!")
+        } else {
+            country.removeCity(cityName)
+            if (country.getCityList().isEmpty()) {
+                countries.removeIf { it.getName() == country.getName() }
             }
         }
+        return this
     }
 
-    private fun debugPrintAllData() {
-        Log.d("data", "ALL AVAILABLE DATA")
-        mapData!!.all.entries.forEach { entry -> Log.d("data", entry.key + " " + entry.value) }
-        Log.d("data", "END OF AVAILABLE DATA")
-
+    fun save() {
+        serializer.save(countries)
+        this.countries = serializer.load().toMutableList()
     }
 
-    private fun loadAndDraw() {
-        val map = mapData!!.getStringSet("cityNames", HashSet())
-        map?.forEach { name -> MapsActivity.drawCity(name, getCity(name)!!.getLatLng(), false) }
+    fun findCountryContainingCityName(cityName: String): Country? {
+        return countries.find { country -> country.getCityNameList().contains(cityName) }
     }
 
-    companion object {
-        private var mapData: SharedPreferences? = null
+    fun getCityList(): List<City> {
+        val cities = ArrayList<City>()
+        countries.forEach { cities.addAll(it.getCityList()) }
+        return cities
+    }
+
+    fun drawAllCities() {
+        countries.forEach { country -> country.getCityList().forEach { city -> drawCity(city) } }
+    }
+
+    fun drawCity(city: City) {
+        MapsActivity.drawCity(city.getName(), city.getLatLng(), false)
+    }
+
+    class Serializer(context: Context) {
+        private var storage: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         private var gson: Gson = Gson()
+        private val storageStringName = "data"
 
-        private fun getPosOldWay(name: String): LatLng {
-            return LatLng(mapData!!.getFloat(name + "lat", 0f).toDouble(),
-                    mapData!!.getFloat(name + "lng", 0f).toDouble())
+        fun load(): List<Country> {
+            val listType = object : TypeToken<ArrayList<Country>>() {}.type
+            return gson.fromJson(storage.getString(storageStringName, "[]"), listType)
         }
 
-        private fun removeCityFromStorageOld(name: String) {
-            try {
-                val cityNames = loadCityList()
-                cityNames.remove(name)
-
-                mapData!!.edit()
-                        .remove(name + "lat")
-                        .remove(name + "lng")
-                        .putStringSet("cityNames", HashSet(cityNames))
-                        .apply()
-
-                Log.d("MapData-Old", "Removed city$name")
-            } catch (ignored: Exception) {
-            }
-        }
-
-        fun addCityToStorage(name: String, lat: Double, lng: Double, country: String) {
-            addCityToStorage(name, LatLng(lat, lng), country)
-        }
-
-        private fun addCityToStorage(name: String, pos: LatLng, country: String) {
-            val city = City(name, pos, country)
-            val cityNames = loadCityList()
-            cityNames.add(name)
-
-            mapData!!.edit()
-                    .putString(name, gson.toJson(city)) //data
-                    .putStringSet("cityNames", HashSet(cityNames)) //list
-                    .apply()
-
-            Log.d("MapData", "Added city $name, pos $pos")
-        }
-
-        fun removeCityFromStorage(name: String) {
-            val cityNames = loadCityList()
-            cityNames.remove(name)
-
-            mapData!!.edit()
-                    .remove(name) //remove city data
-                    .putStringSet("cityNames", HashSet(cityNames)) //remove from list
-                    .apply()
-
-            Log.d("MapData", "Removed city $name")
-        }
-
-        fun getCity(name: String): City? {
-            return gson.fromJson(mapData!!.getString(name, ""), City::class.java)
-        }
-
-        fun loadCityList(): MutableList<String> {
-            return mapData!!.getStringSet("cityNames", HashSet())!!.toMutableList()
+        fun save(mapData: List<Country>) {
+            storage.edit().putString(storageStringName, gson.toJson(mapData)).apply()
         }
     }
 }

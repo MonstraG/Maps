@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.company.maps.R
 import com.company.maps.activities.PickLocationOnMapActivity
+import com.company.maps.data.city.City
 
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -122,6 +123,15 @@ open class BaseCityActivity : AppCompatActivity() {
     private fun setLatLntData(pos: LatLng) {
         cityLatField!!.setText(pos.latitude.format())
         cityLngField!!.setText(pos.longitude.format())
+    }
+
+    fun buildCityFromFields(): City {
+        val cityName = getString(cityNameField)
+        val cityLat = getDouble(cityLatField)
+        val cityLng = getDouble(cityLngField)
+        val country = getString(countryField)
+        val latLng = LatLng(cityLat, cityLng)
+        return City(cityName, latLng, country)
     }
 
     companion object Utils {

@@ -14,4 +14,6 @@
     <string name="toastGeoNoPermission">Could not get location, permission required.</string>
     <string name="toastNoNetworkOrNotFound">No internet access or city was not found.</string>
     <string name="deleteCityButton">Delete City</string>
+    <string name="noCountry">No country selected</string>
+    <string name="toastCityAlreadyExists">This country already contains this city</string>
 </resources>

@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import com.company.maps.R
 import com.company.maps.data.MapData
+import com.company.maps.logger.Logger
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -19,6 +20,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.log("Created")
         setContentView(R.layout.map)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -41,6 +43,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         val cities = mapData!!.getCityList()
         return if (cities.isNotEmpty()) {
             val city = cities[Random().nextInt(cities.size)]
+            Logger.log("Showing random city: $city")
             city.getLatLng()
         } else {
             LatLng(0.0, 0.0)
@@ -52,7 +55,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         private var mapData: MapData? = null
 
         fun drawCity(name: String, pos: LatLng, moveCamera: Boolean) {
-            Log.d("drawCity", "Loaded city: " + name + " " + pos.latitude + " " + pos.longitude)
+            Logger.log("Loaded city: " + name + " " + pos.latitude + " " + pos.longitude)
             mMap!!.addMarker(MarkerOptions().position(pos).title(name))
             if (moveCamera) {
                 mMap!!.moveCamera(CameraUpdateFactory.newLatLng(pos))

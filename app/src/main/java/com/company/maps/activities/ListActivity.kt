@@ -12,6 +12,7 @@ import com.company.maps.activities.city.EditCityActivity
 import com.company.maps.data.MapData
 import com.company.maps.data.item.COUNTRY
 import com.company.maps.data.item.ItemAdapter
+import com.company.maps.logger.Logger
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ListActivity : AppCompatActivity() {
@@ -46,6 +47,7 @@ class ListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.log("Created")
         setContentView(R.layout.city_list)
 
         //init city list view
@@ -71,6 +73,7 @@ class ListActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
+        Logger.logIntent(requestCode, resultCode, intent)
         loadCities(recyclerView!!)
     }
 

@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import com.company.maps.R
 import com.company.maps.activities.PickLocationOnMapActivity
 import com.company.maps.data.city.City
+import com.company.maps.logger.Logger
 
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
@@ -44,6 +45,7 @@ open class BaseCityActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
+        Logger.logIntent(requestCode, resultCode, intent)
         if (requestCode == resultCode && intent != null) {
             setLatLntData(LatLng(
                     intent.getDoubleExtra("pickedLat", 0.0),

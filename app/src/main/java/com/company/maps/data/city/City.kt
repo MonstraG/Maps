@@ -19,6 +19,10 @@ class City internal constructor(private var name: String, private var latLng: La
         return country
     }
 
+    fun serialize(): String {
+        return "{name: '${this.getName()}', latLng: '${this.getLatLng()}', country: '${this.getCountry()}'"
+    }
+
     override fun compareTo(other: City): Int = this.name.compareTo(other.name)
 
 }

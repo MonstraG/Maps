@@ -10,6 +10,7 @@ import com.company.maps.activities.ListActivity.IntentExtraStrings.CITY_NAME
 import com.company.maps.activities.ListActivity.IntentExtraStrings.NEW_CITY_NAME
 import com.company.maps.activities.ListActivity.IntentExtraStrings.OLD_CITY_NAME
 import com.company.maps.data.MapData
+import com.company.maps.logger.Logger
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class EditCityActivity : BaseCityActivity() {
@@ -19,6 +20,7 @@ class EditCityActivity : BaseCityActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.edit_city)
         super.onCreate(savedInstanceState)
+        Logger.log("Created")
 
         mapData = MapData(this)
 
@@ -29,12 +31,11 @@ class EditCityActivity : BaseCityActivity() {
     }
 
     private fun loadCityData() {
-        initialCityName = intent.getStringExtra(CITY_NAME)
-                ?: throw IllegalArgumentException("City name cannot be null")
+        initialCityName = intent.getStringExtra(CITY_NAME) ?: throw IllegalArgumentException("City name cannot be null")
         val city = mapData!!.getCityList().find { it.getName() == initialCityName }
 
         if (city == null) {
-            Log.e("EditCityActivity", "Unable to loadCityData, city with this name not found")
+            Logger.log("Unable to loadCityData, city with this name not found")
             this.finish()
         } else {
             cityNameField!!.setText(city.getName())
@@ -53,9 +54,10 @@ class EditCityActivity : BaseCityActivity() {
                 return@setOnClickListener
             }
 
+            Logger.log("Edit finished on edit removing city $initialCityName")
             mapData!!.removeCity(initialCityName)
             mapData!!.addCity(newCity)
-            setResult(0, Intent().putExtra(NEW_CITY_NAME, newCity.getName()).putExtra(OLD_CITY_NAME, initialCityName)) //list
+            setResult(0, Intent().putExtra(NEW_CITY_NAME, newCity.getName()).putExtra(OLD_CITY_NAME, initialCityName))
             mapData!!.save()
             this.finish()
         }
@@ -63,6 +65,7 @@ class EditCityActivity : BaseCityActivity() {
 
     private fun deleteButtonInit() {
         findViewById<Button>(R.id.deleteCityBtn).setOnClickListener {
+            Logger.log("Edit finished on delete - removing city $initialCityName")
             mapData!!.removeCity(initialCityName)
             mapData!!.save()
             this.finish()

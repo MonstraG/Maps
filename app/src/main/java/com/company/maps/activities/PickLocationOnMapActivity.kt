@@ -8,6 +8,7 @@ import com.company.maps.activities.city.BaseCityActivity.Companion.PICKED_LAT
 import com.company.maps.activities.city.BaseCityActivity.Companion.PICKED_LNG
 import com.company.maps.activities.city.BaseCityActivity.Companion.STARTING_LAT
 import com.company.maps.activities.city.BaseCityActivity.Companion.STARTING_LNG
+import com.company.maps.logger.Logger
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -24,11 +25,11 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.log("Created")
         setContentView(R.layout.map_pick_location)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment?
-        Objects.requireNonNull<SupportMapFragment>(mapFragment).getMapAsync(this)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         findViewById<FloatingActionButton>(R.id.okFAB).setOnClickListener { done() }
     }

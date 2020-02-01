@@ -7,12 +7,14 @@ import android.widget.Toast
 import com.company.maps.R
 import com.company.maps.activities.ListActivity.IntentExtraStrings.CITY_NAME
 import com.company.maps.data.MapData
+import com.company.maps.logger.Logger
 
 open class AddCityActivity : BaseCityActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.add_city)
         super.onCreate(savedInstanceState)
+        Logger.log("Created")
 
         findViewById<Button>(R.id.addCityBtn).setOnClickListener { addCityAndFinish() }
     }

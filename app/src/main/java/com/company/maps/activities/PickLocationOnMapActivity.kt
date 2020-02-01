@@ -52,8 +52,11 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
                 intent.getDoubleExtra(STARTING_LNG, 0.0)
         )
 
+        Logger.log("Selected location: $selectedLocation")
+
         if (selectedLocation.latitude != 0.0 && selectedLocation.longitude != 0.0) {
             moveMarker(googleMap, selectedLocation, true)
+            Logger.log("Selected non-zero location, moving the map")
         }
 
         googleMap.setOnMapClickListener { latLng ->

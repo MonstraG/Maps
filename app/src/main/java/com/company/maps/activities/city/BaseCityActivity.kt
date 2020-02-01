@@ -57,7 +57,7 @@ open class BaseCityActivity : AppCompatActivity() {
     private fun onMapPick() {
         val intent = Intent(this, PickLocationOnMapActivity::class.java)
         val lat = getDouble(cityLatField)
-        val lng =  getDouble(cityLngField)
+        val lng = getDouble(cityLngField)
 
         if (lat != null && lng != null) {
             intent.putExtra(STARTING_LAT, getDouble(cityLatField))
@@ -135,7 +135,7 @@ open class BaseCityActivity : AppCompatActivity() {
         const val PICKED_LNG = "pickedLng"
 
         fun getDouble(field: EditText?): Double? {
-            return field!!.text.toString().toDoubleOrNull()
+            return field!!.text.toString().replace(',', '.').toDoubleOrNull()
         }
 
         fun getString(field: EditText?): String {

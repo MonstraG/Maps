@@ -42,7 +42,8 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
     private fun done() {
         setResult(0, Intent()
                 .putExtra(PICKED_LAT, selectedLocation.latitude)
-                .putExtra(PICKED_LNG, selectedLocation.longitude))
+                .putExtra(PICKED_LNG, selectedLocation.longitude)
+        )
         this.finish()
     }
 

@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.company.maps.R
+import com.company.maps.activities.city.BaseCityActivity.Companion.PICKED_LAT
+import com.company.maps.activities.city.BaseCityActivity.Companion.PICKED_LNG
+import com.company.maps.activities.city.BaseCityActivity.Companion.STARTING_LAT
+import com.company.maps.activities.city.BaseCityActivity.Companion.STARTING_LNG
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -36,26 +40,30 @@ class PickLocationOnMapActivity : FragmentActivity(), OnMapReadyCallback {
 
     private fun done() {
         setResult(0, Intent()
-                .putExtra("pickedLat", selectedLocation.latitude)
-                .putExtra("pickedLng", selectedLocation.longitude))
+                .putExtra(PICKED_LAT, selectedLocation.latitude)
+                .putExtra(PICKED_LNG, selectedLocation.longitude))
         this.finish()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        if (intent.hasExtra("startingLat") && intent.hasExtra("startingLng")) {
-            moveMarker(googleMap, LatLng(
-                    intent.getDoubleExtra("startingLat", 0.0),
-                    intent.getDoubleExtra("startingLng", 0.0)
-            ), true)
+        selectedLocation = LatLng(
+                intent.getDoubleExtra(STARTING_LAT, 0.0),
+                intent.getDoubleExtra(STARTING_LNG, 0.0)
+        )
+
+        if (selectedLocation.latitude != 0.0 && selectedLocation.longitude != 0.0) {
+            moveMarker(googleMap, selectedLocation, true)
         }
 
-        googleMap.setOnMapClickListener { latLng -> moveMarker(googleMap, latLng, false) }
+        googleMap.setOnMapClickListener { latLng ->
+            selectedLocation = latLng
+            moveMarker(googleMap, selectedLocation, false)
+        }
     }
 
     private fun moveMarker(map: GoogleMap, latLng: LatLng, zoom: Boolean) {
         marker?.remove()
         marker = map.addMarker(MarkerOptions().draggable(true).position(latLng))
-        selectedLocation = latLng
 
         if (zoom) {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0F))

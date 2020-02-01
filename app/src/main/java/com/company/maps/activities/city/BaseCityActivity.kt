@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -18,14 +17,11 @@ import com.company.maps.data.city.City
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 
-import java.io.IOException
-
 open class BaseCityActivity : AppCompatActivity() {
     var cityNameField: EditText? = null
     var cityLatField: EditText? = null
     var cityLngField: EditText? = null
     var countryField: EditText? = null
-    private var coder: Geocoder? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +30,6 @@ open class BaseCityActivity : AppCompatActivity() {
         cityLatField = findViewById(R.id.cityLatField)
         cityLngField = findViewById(R.id.cityLngField)
         countryField = findViewById(R.id.countryNameField)
-
-        coder = Geocoder(this)
 
         //init ways to get latLng
         getLatLngFromApiBtnInit()
@@ -60,11 +54,12 @@ open class BaseCityActivity : AppCompatActivity() {
 
     private fun onMapPick() {
         val intent = Intent(this, PickLocationOnMapActivity::class.java)
-        try {
-            intent.putExtra("startingLat", getDouble(cityLatField))
-            intent.putExtra("startingLng", getDouble(cityLngField))
-        } catch (e: Exception) {
-            Log.e("BaseCityActivity::onMapPick", "Exception when trying to do onMapPick, err: ${e.message}, stacktrace: ${e.stackTrace}")
+        val lat = getDouble(cityLatField)
+        val lng =  getDouble(cityLngField)
+
+        if (lat != null && lng != null) {
+            intent.putExtra(STARTING_LAT, getDouble(cityLatField))
+            intent.putExtra(STARTING_LNG, getDouble(cityLngField))
         }
 
         startActivityForResult(intent, 0)
@@ -81,18 +76,14 @@ open class BaseCityActivity : AppCompatActivity() {
     }
 
     private fun getLocationFromAddress(strAddress: String): LatLng? {
-        try {
-            val address = coder!!.getFromLocationName(strAddress, 1)
-            if (address != null && address.size > 0) {
-                val location = address[0]
-                return LatLng(location.latitude, location.longitude)
-            }
-        } catch (e: IOException) {
-            Log.e("BaseCityActivity::getLocationFromAddress", "Exception when trying to getLocationFromAddress, err: ${e.message}, stacktrace: ${e.stackTrace}")
+        val address = Geocoder(this).getFromLocationName(strAddress, 1)
+        if (address == null || address.size == 0) {
+            Toast.makeText(this, R.string.toastNoNetworkOrNotFound, Toast.LENGTH_SHORT).show()
+            return null
         }
 
-        Toast.makeText(this, R.string.toastNoNetworkOrNotFound, Toast.LENGTH_SHORT).show()
-        return null
+        val location = address[0]
+        return LatLng(location.latitude, location.longitude)
     }
 
     private fun getFromCurLocBtnInit() {
@@ -105,8 +96,7 @@ open class BaseCityActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         // If request is cancelled, the result arrays are empty.
         if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             val mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -123,18 +113,27 @@ open class BaseCityActivity : AppCompatActivity() {
         cityLngField!!.setText(pos.longitude.format())
     }
 
-    fun buildCityFromFields(): City {
+    fun buildCityFromFields(): City? {
         val cityName = getString(cityNameField)
         val cityLat = getDouble(cityLatField)
         val cityLng = getDouble(cityLngField)
         val country = getString(countryField)
-        val latLng = LatLng(cityLat, cityLng)
-        return City(cityName, latLng, country)
+
+        if (cityName == "" || cityLat == null || cityLng == null) {
+            return null
+        }
+
+        return City(cityName, LatLng(cityLat, cityLng), country)
     }
 
-    companion object Utils {
-        fun getDouble(field: EditText?): Double {
-            return field!!.text.toString().toDouble()
+    companion object {
+        const val STARTING_LAT = "startingLat"
+        const val STARTING_LNG = "startingLng"
+        const val PICKED_LAT = "pickedLat"
+        const val PICKED_LNG = "pickedLng"
+
+        fun getDouble(field: EditText?): Double? {
+            return field!!.text.toString().toDoubleOrNull()
         }
 
         fun getString(field: EditText?): String {

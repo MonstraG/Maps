@@ -21,9 +21,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment?
-        Objects.requireNonNull<SupportMapFragment>(mapFragment).getMapAsync(this)
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         findViewById<FloatingActionButton>(R.id.openCityListFAB).setOnClickListener {
             startActivity(Intent(this, ListActivity::class.java))

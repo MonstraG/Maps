@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import com.company.maps.R
-import com.company.maps.activities.ListActivity.EditExtraStrings.CITY_NAME
+import com.company.maps.activities.ListActivity.IntentExtraStrings.CITY_NAME
 import com.company.maps.data.MapData
 
 open class AddCityActivity : BaseCityActivity() {
@@ -19,7 +19,7 @@ open class AddCityActivity : BaseCityActivity() {
 
     private fun addCityAndFinish() {
         val city = buildCityFromFields()
-        if (city.getName() == "") {
+        if (city == null) {
             Toast.makeText(this, R.string.toastCannotCreateCity, Toast.LENGTH_LONG).show()
             return
         }

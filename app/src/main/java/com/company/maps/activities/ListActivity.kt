@@ -17,6 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class ListActivity : AppCompatActivity() {
     private var recyclerView: RecyclerView? = null
     private var mAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? = null
+
     private val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             return false
@@ -73,7 +74,7 @@ class ListActivity : AppCompatActivity() {
         loadCities(recyclerView!!)
     }
 
-    companion object EditExtraStrings {
+    companion object IntentExtraStrings {
         const val CITY_NAME = "cityName"
         const val OLD_CITY_NAME = "oldCityName"
         const val NEW_CITY_NAME = "newCityName"
